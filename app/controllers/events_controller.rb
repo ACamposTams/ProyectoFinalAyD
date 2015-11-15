@@ -9,11 +9,11 @@ class EventsController < ApplicationController
 	end
 
 	def new
-		@event = Event.new
+		@event = current_user.events.build
 	end
 
 	def create
-		@event = Event.new(ev_params)
+		@event = current_user.events.build(ev_params)
 
 		if @event.save
 			redirect_to @event, notice: "Succesfully created new event"
