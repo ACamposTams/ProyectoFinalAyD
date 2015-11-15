@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
 	before_action :find_event, only: [:show, :edit, :update, :destroy]
-	# after_action :create_events_user
+	after_action :create_events_user
 
 	def index
 		@events = Event.all.order("created_at DESC")
@@ -16,21 +16,23 @@ class EventsController < ApplicationController
 
 	def create
 		@event = current_user.events.build(ev_params)
-
+		@event.save
 		# @eventOwner = EventsUser.new(params[:user_id => current_user.user_id, :event_id => @event.event_id])
 		# EventsUser.insert("events_users").params()
 		# @eventUser = EventsUser.build(:user_id => @event.user_id, :event_id => @event.event_id)
 		# @eventUser.save
-		# EventsUser.create!(:user_id => :user_id)
+		
 		if @event.save
+			@newUserEvent = EventsUser.create(:event_id=>@event.id, :user_id=>@event.user_id, :owner=>@event.user_id)
 			redirect_to @event, notice: "Succesfully created new event"
 		else
 			render 'new'
 		end
+		
 	end
 
 	def create_events_user
-		# EventsUser.create!(params[event.id].merge(owner: => :event_id))
+		# EventsUser.create!(params[event.id].merge(owner: => :event_id))	
 	end
 
 	def edit
