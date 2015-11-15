@@ -9,7 +9,16 @@
 					%li= msg
 
 	.form-group 
+		= f.input :image, input_html: { class: 'form-control'}
+
+	.form-group 
 		= f.input :name, input_html: { class: 'form-control'}
+
+	.form-group 
+		= f.input :datetime, input_html: { class: 'form-control'}
+
+	.form-group 
+		= f.input :location, input_html: { class: 'form-control'}
 
 	.form-group
 		= f.input :description, input_html: { class: 'form-control'}
