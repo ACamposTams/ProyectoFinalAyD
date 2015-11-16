@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
 	before_action :find_event, only: [:show, :edit, :update, :destroy]
-	after_action :create_events_user
+	# after_action :create_events_user
 
 	def index
 		@events = Event.all.order("created_at DESC")
@@ -31,8 +31,15 @@ class EventsController < ApplicationController
 		
 	end
 
-	def create_events_user
-		# EventsUser.create!(params[event.id].merge(owner: => :event_id))	
+	def invite
+		@event = Event.find(params[:id])
+		@users = User.all
+		# @event = Event.find(params[:id])
+		# # @user = User.find(@event.user_id)
+		if User.find(params[:invitee])
+			@u = User.find(params[:invitee])
+			@invite = EventsUser.create(:event_id=>@event.id, :user_id=>@u.id, :owner=>@u.id)
+		end
 	end
 
 	def edit
