@@ -25,7 +25,7 @@ class EventsUsersController < ApplicationController
       if !params[:users].nil?
         params[:users][:id].each do |u| 
             if !u.empty?
-              @event.eventsusers.build(:user_id => u, :owner => @event.user_id)
+              EventsUser.create(:event_id => @event.id, :user_id => u, :owner => @event.user_id)
             end 
           end
       else 

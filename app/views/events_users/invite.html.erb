@@ -1,4 +1,4 @@
-<%= form_for (@event), :url => {:action => "invite", :id => @event.id } do |f| %>
+<%= form_for (@event), :url => invite_events_users_path(@event), :method => :GET do |f| %>
 
 	<div class = "field" >
 		<%= f.label "Users" %><br />
