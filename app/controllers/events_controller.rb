@@ -9,7 +9,7 @@ class EventsController < ApplicationController
 
 	def show
 		@user = current_user
-		@invites = EventsUser.all.where("events_users.event_id = ?", params[:id])
+		@invites = EventsUser.select("users.*").joins("JOIN users on users.id = events_users.user_id").where("events_users.event_id = ?", params[:id])
 		# render "events_users/invite"
 	end
 
