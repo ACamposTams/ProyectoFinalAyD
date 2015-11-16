@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
-	before_action :find_event, only: [:show, :edit, :update, :destroy]
+	before_action :find_event, only: [:show, :edit, :update, :destroy, :invite]
+	before_action :authenticate_user!, except: [:index, :show]
 	# after_action :create_events_user
 
 	def index
@@ -7,11 +8,11 @@ class EventsController < ApplicationController
 	end
 
 	def show
+		@user = current_user
 	end
 
 	def new
 		@event = current_user.events.build
-
 	end
 
 	def create
@@ -39,6 +40,8 @@ class EventsController < ApplicationController
 		if User.find(params[:invitee])
 			@u = User.find(params[:invitee])
 			@invite = EventsUser.create(:event_id=>@event.id, :user_id=>@u.id, :owner=>@u.id)
+		else
+			redirect_to @event, notice: "Error"
 		end
 	end
 
