@@ -9,6 +9,7 @@ class EventsController < ApplicationController
 
 	def show
 		@user = current_user
+		@invites = EventsUser.all.where("events_users.event_id = ?", params[:id])
 		# render "events_users/invite"
 	end
 

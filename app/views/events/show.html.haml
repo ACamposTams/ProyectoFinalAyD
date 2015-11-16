@@ -10,6 +10,7 @@
 				%p= @event.location
 				Created by 
 				= @event.user.email
+
 				.panel-footer
 					.row
 						.col-md-6
@@ -24,3 +25,15 @@
 										= link_to "Invite", invite_events_users_path, class: "btn btn-default"
 										= link_to "Edit", edit_event_path, class: "btn btn-default"
 										= link_to "Delete", event_path, method: :delete, data: { confirm: "Are you sure?"}, class: "btn btn-default"
+	.col-md-8.col-md-offset-2
+		.panel.panel-default
+			.panel-heading.event_image
+				%h1= "Guests"
+			.panel-body
+				%p
+				-@invites.each do |i|
+				.slide 
+					%p= i.email
+
+
+				
