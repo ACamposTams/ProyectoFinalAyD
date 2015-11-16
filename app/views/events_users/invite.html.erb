@@ -1,0 +1,13 @@
+<%= form_for (@event), :url => {:action => "invite", :id => @event.id } do |f| %>
+
+	<div class = "field" >
+		<%= f.label "Users" %><br />
+		<%= collection_select(:users, :id, @all_users, :id, :email, {}, {:multiple => true} ) %>
+	</div>
+
+	<div class  = "actions" >
+		<%= f.submit 'Invite'%>
+	</div>
+<% end %>
+
+

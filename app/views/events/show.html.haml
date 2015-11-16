@@ -8,19 +8,19 @@
 				%p.description= @event.description
 				%p= @event.datetime
 				%p= @event.location
-				Created by
+				Created by 
 				= @event.user.email
 				.panel-footer
 					.row
 						.col-md-6
 							%p.user
-							Created by
+							Created by 
 							= @event.user.email
 						.col-md-6
 							.btn-group.pull-right
 								= link_to "Back", root_path, class: "btn btn-default"
 								- if user_signed_in?
 									- if @user.id == @event.user.id
-										= link_to "Invite", invite_event_path, class: "btn btn-default"
+										= link_to "Invite", invite_events_users_path, class: "btn btn-default"
 										= link_to "Edit", edit_event_path, class: "btn btn-default"
 										= link_to "Delete", event_path, method: :delete, data: { confirm: "Are you sure?"}, class: "btn btn-default"

@@ -12,6 +12,37 @@ class EventsUsersController < ApplicationController
   def show
   end
 
+  def invite
+    @event = Event.find(params[:id])
+    # @events_users = @event.eventsusers.new(:user_id => nil)
+    # @events_users = @event.events_users.build
+    # @users = User.all
+    @all_users = User.all
+    # @all_users = User.all.map { |u| [u.id, u.email] }
+    # if !params[:user].nil? or !params[:id].nil?
+      # unless params[:users][:id].nil? 
+
+      if !params[:users].nil?
+        params[:users][:id].each do |u| 
+            if !u.empty?
+              @event.eventsusers.build(:user_id => u, :owner => @event.user_id)
+            end 
+          end
+      else 
+       
+      end
+      
+    
+    # end
+
+    # if User.find(params[:invitee])
+    #   @u = User.find(params[:invitee])
+    #   @invite = EventsUser.create(:event_id=>@event.id, :user_id=>@u.id, :owner=>@u.id)
+    # else
+    #   redirect_to @event, notice: "Error"
+    # end
+  end
+
   # GET /events_users/new
   def new
     @events_user = EventsUser.new

@@ -1,0 +1,13 @@
+<%= form_for (@event) do |f| %>
+
+	<div class = "field" >
+		<%= f.lable "Users" %><br />
+		<%= collection_select(:users, :id, @all_users, :id, :email, {prompt: true}, {:multiple => true} ) %>
+	</div>
+
+	<div class  = "actions" >
+		<%= f.submit %>
+	</div>
+<% end %>
+
+

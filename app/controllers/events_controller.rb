@@ -9,19 +9,20 @@ class EventsController < ApplicationController
 
 	def show
 		@user = current_user
+		# render "events_users/invite"
 	end
 
 	def new
 		@event = current_user.events.build
+		# @all_users = User.all
+		# @events_user = @event.eventsuser.build
+
 	end
 
 	def create
 		@event = current_user.events.build(ev_params)
+		@event.user_id = current_user.id
 		@event.save
-		# @eventOwner = EventsUser.new(params[:user_id => current_user.user_id, :event_id => @event.event_id])
-		# EventsUser.insert("events_users").params()
-		# @eventUser = EventsUser.build(:user_id => @event.user_id, :event_id => @event.event_id)
-		# @eventUser.save
 		
 		if @event.save
 			@newUserEvent = EventsUser.create(:event_id=>@event.id, :user_id=>@event.user_id, :owner=>@event.user_id)
@@ -34,15 +35,27 @@ class EventsController < ApplicationController
 
 	def invite
 		@event = Event.find(params[:id])
-		@users = User.all
-		# @event = Event.find(params[:id])
-		# # @user = User.find(@event.user_id)
-		if User.find(params[:invitee])
-			@u = User.find(params[:invitee])
-			@invite = EventsUser.create(:event_id=>@event.id, :user_id=>@u.id, :owner=>@u.id)
-		else
-			redirect_to @event, notice: "Error"
-		end
+		# @events_users = @event.EventsUser.build
+		@events_users = @event.EventsUser.build(:user_id => nil)
+		# @users = User.all
+		@all_users = User.all
+		# @all_users = User.all.map { |u| [u.id, u.email] }
+		# if !params[:user].nil? or !params[:id].nil?
+			# unless params[:users][:id].nil? 
+			params[:user].each do |u| 
+				if !u.empty?
+					@event.eventsusers.build(:user_id => u)
+				end 
+			end
+		
+		# end
+
+		# if User.find(params[:invitee])
+		# 	@u = User.find(params[:invitee])
+		# 	@invite = EventsUser.create(:event_id=>@event.id, :user_id=>@u.id, :owner=>@u.id)
+		# else
+		# 	redirect_to @event, notice: "Error"
+		# end
 	end
 
 	def edit
