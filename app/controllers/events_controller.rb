@@ -31,6 +31,7 @@ class EventsController < ApplicationController
 		
 		if @event.save
 			@newUserEvent = EventsUser.create(:event_id=>@event.id, :user_id=>@event.user_id, :owner=>@event.user_id)
+			@node = Node.create(:node_id => @event.id, :num_vertices=>0)
 			redirect_to @event, notice: "Succesfully created new event"
 		else
 			render 'new'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151117043029) do
+ActiveRecord::Schema.define(version: 20151117065048) do
 
   create_table "events", force: :cascade do |t|
     t.string   "name"
@@ -37,6 +37,13 @@ ActiveRecord::Schema.define(version: 20151117043029) do
   end
 
   add_index "events_users", ["event_id", "user_id"], name: "index_events_users_on_event_id_and_user_id"
+
+  create_table "nodes", force: :cascade do |t|
+    t.integer  "node_id"
+    t.integer  "num_vertices"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "taggings", force: :cascade do |t|
     t.integer  "event_id"
@@ -73,5 +80,13 @@ ActiveRecord::Schema.define(version: 20151117043029) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "vertices", force: :cascade do |t|
+    t.integer  "node_a"
+    t.integer  "node_b"
+    t.float    "weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
