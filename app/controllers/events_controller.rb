@@ -4,7 +4,11 @@ class EventsController < ApplicationController
 	# after_action :create_events_user
 
 	def index
-		@events = Event.all.order("created_at DESC")
+		if params[:tag]
+    		@events = Event.tagged_with(params[:tag])
+  		else
+    		@events = Event.all.order("created_at DESC")
+  		end
 	end
 
 	def show
@@ -78,10 +82,12 @@ class EventsController < ApplicationController
 	private
 
 	def ev_params
-		params.require(:event).permit(:name, :description, :image, :location, :datetime)
+		params.require(:event).permit(:name, :description, :image, :location, :datetime, :all_tags)
 	end
 
 	def find_event
 		@event = Event.find(params[:id])
 	end
+
+
 end

@@ -21,6 +21,9 @@
 		= f.input :location, input_html: { class: 'form-control'}
 
 	.form-group
+		= f.input :all_tags, placeholder: "Separate the tags by commas", input_html: { class: 'form-control'}
+
+	.form-group
 		= f.input :description, input_html: { class: 'form-control'}
 
 	= f.button :submit, class: 'btn btn-primary'

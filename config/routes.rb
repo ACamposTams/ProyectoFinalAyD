@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :events_users
 
   get 'events_users/invite/:id' => 'events_users#invite', :as => :invite_events_users
+  get 'tags/:tag', to: 'events#index', as: "tag"
   
   root "events#index"
 end

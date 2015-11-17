@@ -8,9 +8,14 @@
 				%p.description= @event.description
 				%p= @event.datetime
 				%p= @event.location
+				%p
 				Created by 
 				= @event.user.first_name
 				= @event.user.last_name
+				%br
+				%br
+				Tags:
+				= @event.all_tags
 
 				.panel-footer
 					.row
