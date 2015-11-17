@@ -1,0 +1,7 @@
+= form_for (@event) do |f|
+  .field
+    = f.lable "Users"
+    %br/
+    = collection_select(:users, :id, @all_users, :id, :email, {prompt: true}, {:multiple => true} )
+  .actions
+    = f.submit
