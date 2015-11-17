@@ -9,7 +9,8 @@
 				%p= @event.datetime
 				%p= @event.location
 				Created by 
-				= @event.user.email
+				= @event.user.first_name
+				= @event.user.last_name
 
 				.panel-footer
 					.row
@@ -25,6 +26,8 @@
 										= link_to "Invite", invite_events_users_path, class: "btn btn-default"
 										= link_to "Edit", edit_event_path, class: "btn btn-default"
 										= link_to "Delete", event_path, method: :delete, data: { confirm: "Are you sure?"}, class: "btn btn-default"
+									- else
+										= link_to "Assist", event_path, class: "btn btn-default" #agregar el usuario al evento
 	.col-md-8.col-md-offset-2
 		.panel.panel-default
 			.panel-heading.event_image
@@ -32,8 +35,7 @@
 			.panel-body
 				%p
 				-@invites.each do |i|
-				.slide 
-					%p= i.email
-
-
+					.slide 
+					= i.first_name
+					= i.last_name 
 				
