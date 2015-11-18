@@ -1,7 +1,7 @@
 #events.transitions-enabled
 	- @events.each do |event|
 		.box.panel.panel-default
-			= link_to (image_tag event.image.url(:medium)), event
+			= link_to (image_tag event.image.url), event
 			.panel-body
 				%h2= link_to event.name, event
 				Created by:

@@ -1,10 +1,10 @@
-#events_show.row
+#event_show.row
 	.col-md-8.col-md-offset-2
 		.panel.panel-default
 			.panel-heading.event_image
-				%h1= @event.name
+				= image_tag @event.image.url
 			.panel-body
-				= image_tag @event.image.url(:medium)
+				%h1= @event.name
 				%p.description= @event.description
 				%p= @event.datetime
 				%p= @event.location

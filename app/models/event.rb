@@ -4,9 +4,11 @@ class Event < ActiveRecord::Base
 	has_many :taggings
 	has_many :tags, :through => :taggings 
 
+	Paperclip.options[:command_path] = 'C:\Program Files\ImageMagick-6.9.2-Q16'
+	
 	belongs_to :user
 
-	has_attached_file :image, :styles => { :medium => "300x300>" }
+	has_attached_file :image, styles: { medium: "300x300>" }
 	validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
 	def all_tags=(names)
