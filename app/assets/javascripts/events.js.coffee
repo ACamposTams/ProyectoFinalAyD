@@ -2,8 +2,8 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-->
-	$('#events').imageLoaded ->
-		$('#events').masonry
-			itemSelector: '.box'
-			ifFitWidth: true
+$ ->
+  $('#events').imagesLoaded ->
+    $('#events').masonry
+      itemSelector: '.box'
+      isFitWidth: true

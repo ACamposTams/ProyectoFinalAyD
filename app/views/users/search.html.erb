@@ -1,7 +1,0 @@
-<% if @search.nil? %>
-	<%= "No event found matching that search." %>
-<% else %> 
-	<% @search.each do |s| %>
-		<%= s.id %>
-	<% end %>
-<% end %>

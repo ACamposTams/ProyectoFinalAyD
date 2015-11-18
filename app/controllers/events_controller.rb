@@ -113,7 +113,7 @@ class EventsController < ApplicationController
 				v.destroy
 			end
 		end
-		
+
 		@node.destroy
 		redirect_to root_path
 	end

@@ -1,0 +1,15 @@
+-if @search.nil?
+	No event found matching that search.
+-else
+	#events.transitions-enabled
+		-@search.each do |s|
+			.box.panel.panel-default
+				= link_to (image_tag s.image.url), s
+				.panel-body
+					%h2= link_to s.name, s
+					Created by:
+					= s.user.first_name 
+					= s.user.last_name
+					%br
+					Tags:
+					= s.all_tags

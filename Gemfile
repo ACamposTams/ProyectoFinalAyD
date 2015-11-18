@@ -26,6 +26,7 @@ gem 'simple_form', '~>3.0.2'
 gem 'devise', '~>3.4.0'
 gem 'paperclip', git: "git://github.com/thoughtbot/paperclip.git"
 gem 'masonry-rails', '~> 0.2.4'
+gem 'date_validator', '~> 0.8.1'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
