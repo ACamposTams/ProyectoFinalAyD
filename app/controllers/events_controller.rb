@@ -32,6 +32,34 @@ class EventsController < ApplicationController
 		if @event.save
 			@newUserEvent = EventsUser.create(:event_id=>@event.id, :user_id=>@event.user_id, :owner=>@event.user_id)
 			@node = Node.create(:node_id => @event.id, :num_vertices=>0)
+			#@tagsA = @node.all(select("events.all_tags").joins("JOIN events on event.id = nodes.node_id").where("events.id = ?", @node.id))
+			@tagsA = @event.tags #esta es la que deberiamos usar si podemos llamar la funcion tag
+			@nodes = Node.all
+
+			@weight = 0
+
+			@nodes.each do |n| 
+				@tempEvent = Event.find(n.node_id)
+
+				if @tempEvent.id != @event.id
+					@tagsB = @tempEvent.tags # esta es la funcion que deberiamos usar
+					#@tagsB = @tempEvent.all(select("events.tags").joins("JOIN events on event.id = nodes.node_id").where("events.id = ?", @tempEvent.id))
+					@weight = 0
+					@tagsA.each do |tagA|
+						@tagsB.each do |tagB|
+							if tagA == tagB
+								@weight = @weight + 1
+							end
+						end
+					end
+
+					if @weight > 0
+						@vertex = Vertex.create(:node_a => @node.id, :node_b => @tempEvent.id, :weight => @weight)
+					end
+
+				end
+			end
+
 			redirect_to @event, notice: "Succesfully created new event"
 		else
 			render 'new'
@@ -83,12 +111,25 @@ class EventsController < ApplicationController
 	private
 
 	def ev_params
-		params.require(:event).permit(:name, :description, :image, :location, :datetime, :all_tags)
+		params.require(:event).permit(:name, :description, :location, :datetime, :all_tags) # se quito :image
 	end
 
 	def find_event
 		@event = Event.find(params[:id])
 	end
 
+	def all_tags=(names)
+  		self.tags = names.split(",").map do |name|
+      		Tag.where(name: name.strip).first_or_create!
+  		end
+	end
+
+	def all_tags
+  		self.tags.map(&:name).join(", ")
+	end
+
+	def self.tagged_with(name)
+  		Tag.find_by_name!(name).events
+	end
 
 end
