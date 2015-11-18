@@ -104,7 +104,17 @@ class EventsController < ApplicationController
 	end
 
 	def destroy
+		@node = Node.find(params[:id])
 		@event.destroy
+		@vertexes = Vertex.all
+
+		@vertexes.each do |v|
+			if v.node_a == @node.id || v.node_b == @node.id
+				v.destroy
+			end
+		end
+		
+		@node.destroy
 		redirect_to root_path
 	end
 
