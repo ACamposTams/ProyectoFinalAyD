@@ -11,7 +11,50 @@ class UsersController < ApplicationController
 		if @search_name == ""
 			@search = Event.all
 		else
-			@search = Event.select("events.*").where(["name LIKE ?", "%#{@search_name}%"])
+			@search = Event.select("events.*").where(["name LIKE ? OR tags LIKE ?", "%#{@search_name}%",  "%#{@search_name}%"])
 		end
+
+		# @similarEvents = Event.select("events.*").where(["tags LIKE ?", "%#{@search_name}%"])
+
+		@recommendation = Array.new(10)
+		@i = 0
+
+		@search.each do |e|
+			@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id])
+
+			@eventVertices.each do |ev|
+			# @tempEvent = Vertex.where(["node_a = ? OR node_b = ?", e.id, e.id]).first
+				if !ev.nil?
+					@node = ev.node_a
+					# @node = Vertex.select("vertices.node_a").where("node_b = ?", e.id)
+					if @node == e.id
+						@event = Event.find(ev.node_b)
+
+						if !@event.nil?
+							@recommendation[@i] = @event
+							@i = @i + 1
+						end
+						
+					else
+						@event = Event.find(@node)
+						if !@event.nil?
+							@recommendation[@i] = @event
+							@i = @i + 1
+						end
+					end
+				end
+			end	
+		end
+		# @events = Event.all
+
+		# @events.each do |e|
+		# 	@eventTags = e.tags
+
+		# 	@eventTags.each do |t|
+		# 		if t == @search_name
+		# 			@similarEvent = true
+		# 		end
+		# 	end
+		# end
 	end
 end

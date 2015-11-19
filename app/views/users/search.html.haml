@@ -13,3 +13,16 @@
 					%br
 					Tags:
 					= s.all_tags
+	#events.transitions-enabled
+		-@recommendation.each do |s|
+			-if !s.nil?
+				.box.panel.panel-default
+					= link_to (image_tag s.image.url), s
+					.panel-body
+						%h2= link_to s.name, s
+						Created by:
+						= s.user.first_name 
+						= s.user.last_name
+						%br
+						Tags:
+						= s.all_tags
