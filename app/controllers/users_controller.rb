@@ -11,9 +11,9 @@ class UsersController < ApplicationController
 		if @search_name == ""
 			@search = Event.all
 		else
-			@search = Event.select("events.*").where(["name LIKE ? OR tags LIKE ?", "%#{@search_name}%",  "%#{@search_name}%"])
+			@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{@search_name}%",  "%#{@search_name}%"])
 		end
-
+		Rails.logger.debug("My object: #{@search.inspect}")
 		# @similarEvents = Event.select("events.*").where(["tags LIKE ?", "%#{@search_name}%"])
 
 		@recommendation = Array.new(10)

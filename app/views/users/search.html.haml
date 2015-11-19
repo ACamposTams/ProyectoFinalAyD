@@ -1,18 +1,21 @@
 -if @search.nil?
 	No event found matching that search.
 -else
+	%h2= "Search Results"
 	#events.transitions-enabled
 		-@search.each do |s|
 			.box.panel.panel-default
 				= link_to (image_tag s.image.url), s
 				.panel-body
 					%h2= link_to s.name, s
+					%h2= s.datetime
 					Created by:
 					= s.user.first_name 
 					= s.user.last_name
 					%br
 					Tags:
 					= s.all_tags
+	%h2= "Suggestions"
 	#events.transitions-enabled
 		-@recommendation.each do |s|
 			-if !s.nil?
@@ -20,6 +23,7 @@
 					= link_to (image_tag s.image.url), s
 					.panel-body
 						%h2= link_to s.name, s
+						%h2= s.datetime
 						Created by:
 						= s.user.first_name 
 						= s.user.last_name
