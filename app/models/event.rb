@@ -8,7 +8,9 @@ class Event < ActiveRecord::Base
 	
 	belongs_to :user
 
-	validates :datetime, date: {after: Proc.new {Time.now.zone}}
+	Time.zone = "Mexico City"
+
+	validates :datetime, date: {after_or_equal_to: Proc.new {Time.zone.now}}
 
 	has_attached_file :image, styles: { medium: "300x300>" }
 	validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
