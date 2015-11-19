@@ -18,6 +18,7 @@ class UsersController < ApplicationController
 
 		@recommendation = Array.new(10)
 		@i = 0
+		@repeat = false
 
 		@search.each do |e|
 			@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id])
@@ -31,20 +32,59 @@ class UsersController < ApplicationController
 						@event = Event.find(ev.node_b)
 
 						if !@event.nil?
-							@recommendation[@i] = @event
-							@i = @i + 1
+
+							@recommendation.each do |r|
+								if !r.nil?
+									if ((r.id == @event.id) || (@event.id == e.id))
+										@repeat = true
+									else
+										@repeat = false
+									end
+								end
+							end
+
+							if @repeat == false
+								if !(@event.id == e.id)
+									@recommendation[@i] = @event
+									@i = @i + 1
+								end
+							end
 						end
 						
 					else
 						@event = Event.find(@node)
 						if !@event.nil?
-							@recommendation[@i] = @event
-							@i = @i + 1
+							@recommendation.each do |r|
+								if !r.nil?
+									if ((r.id == @event.id) || (@event.id == e.id))
+										@repeat = true
+									else
+										@repeat = false
+									end
+								end
+							end
+							
+							if @repeat == false
+								if !(@event.id == e.id)
+									@recommendation[@i] = @event
+									@i = @i + 1
+								end
+							end
 						end
 					end
 				end
 			end	
 		end
+
+		# @search.each do |s|
+		# 	@recommendation.each do |r|
+		# 		if !r.nil? 
+		# 			if r.id = s.id
+		# 				@recommendation.delete(r)
+		# 			end
+		# 		end
+		# 	end
+		# end
 		# @events = Event.all
 
 		# @events.each do |e|
