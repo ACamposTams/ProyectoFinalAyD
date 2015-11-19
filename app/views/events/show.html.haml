@@ -6,23 +6,22 @@
 			.panel-body
 				%h1= @event.name
 				%p.description= @event.description
-				%p= @event.datetime
+				%br
+				%p= @event.datetime.to_date
+				%p= @event.datetime.strftime("%I:%M%p")
 				%p= @event.location
+				%p
+				Tags:
+				= @event.all_tags
 				%p
 				Created by 
 				= @event.user.first_name
 				= @event.user.last_name
-				%br
-				%br
-				Tags:
-				= @event.all_tags
-
+				%p
 				.panel-footer
 					.row
 						.col-md-6
 							%p.user
-							Created by 
-							= @event.user.email
 						.col-md-6
 							.btn-group.pull-right
 								= link_to "Back", root_path, class: "btn btn-default"
@@ -36,7 +35,8 @@
 	.col-md-8.col-md-offset-2
 		.panel.panel-default
 			.panel-heading.event_image
-				%h1= "Guests"
+				.panel-heading-text
+					%h1= "Guests"
 			.panel-body
 				%p
 				-@invites.each do |i|

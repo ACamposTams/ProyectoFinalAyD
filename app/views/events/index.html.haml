@@ -4,7 +4,8 @@
 			= link_to (image_tag event.image.url), event
 			.panel-body
 				%h2= link_to event.name, event
-				%h2= event.datetime
+				%p= event.datetime.to_date
+				%p= event.datetime.strftime("%I:%M%p")
 				Created by:
 				= event.user.first_name 
 				= event.user.last_name

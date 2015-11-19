@@ -82,6 +82,12 @@ nav {
 	.panel-heading {
 		padding: 0;
 	}
+	.panel-heading-text {
+		padding: 35px;
+		h1 {
+			margin: 0 0 10px 0;
+		}
+	}
 	.event_image {
 		img {
 			max-width: 100%;
