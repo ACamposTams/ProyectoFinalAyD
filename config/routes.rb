@@ -5,8 +5,10 @@ Rails.application.routes.draw do
   resources :events_users
   resources :users
 
-  get 'users/show' => 'users#show', :as => :show_users
+  get '/users/invites' => 'users#invites', :as => :invites_users
+  get '/users/show' => 'users#show', :as => :show_users
   get '/search' => 'users#search', :as => :search
+  
   get 'events_users/invite/:id' => 'events_users#invite', :as => :invite_events_users
   get 'tags/:tag', to: 'events#index', as: "tag"
   

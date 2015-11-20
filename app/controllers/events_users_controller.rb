@@ -17,7 +17,7 @@ class EventsUsersController < ApplicationController
     # @events_users = @event.eventsusers.new(:user_id => nil)
     # @events_users = @event.events_users.build
     # @users = User.all
-    @all_users = User.all
+    @all_users = User.all.where("users.id != ?", current_user.id)
     # @all_users = User.all.map { |u| [u.id, u.email] }
     # if !params[:user].nil? or !params[:id].nil?
       # unless params[:users][:id].nil? 

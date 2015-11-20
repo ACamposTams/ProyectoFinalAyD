@@ -1,0 +1,17 @@
+#invites.transitions-enabled
+	-if !@invites.nil?
+		-@invites.each do |s|
+			.box.panel.panel-default
+				= link_to (image_tag s.image.url), s
+				.panel-body
+					%h2= link_to s.name, s
+					%p= s.datetime.to_date
+					%p= s.datetime.strftime("%I:%M%p")
+					Created by:
+					= s.user.first_name 
+					= s.user.last_name
+					%br
+					Tags:
+					= s.all_tags
+	-else
+		%h4= "No invitations found"

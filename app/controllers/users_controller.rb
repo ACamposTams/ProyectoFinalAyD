@@ -1,8 +1,33 @@
 class UsersController < ApplicationController
-	skip_before_filter :search, only: :show
+	# skip_before_filter :search, only: :show, :invites
+	skip_before_filter :invites, only: :show
+
 	def show
 		@user = current_user
-		search
+
+		# search
+
+		@personalRec = Array.new()
+		@events = Event.all
+		@i = 0
+
+		if !@user.nil?
+			@user_tags = @user.tags
+			
+			@events.each do |e|	
+				@eventTags = e.tags
+				@user_tags.each do |ut|
+					
+					@eventTags.each do |et|
+						if (et.id == ut.id) && @personalRec.index(e).nil?
+							@personalRec[@i] = e
+							@i = @i +1
+						end
+					end
+				end
+			end
+		end
+
 	end
 
 	def search
@@ -91,6 +116,10 @@ class UsersController < ApplicationController
 		# 		end
 		# 	end
 		# end
+	end
+
+	def invites 
+		@invites = Event.select("events.*").joins("JOIN events_users ON events.id = events_users.event_id").where("events_users.user_id = ? AND events_users.owner != ?", current_user.id, current_user.id).uniq
 	end
 
 	def all_tags=(names)
