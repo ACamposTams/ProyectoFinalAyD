@@ -7,3 +7,9 @@ $ ->
     $('#events').masonry
       itemSelector: '.box'
       isFitWidth: true
+
+$ ->
+  $('#recommendations').imagesLoaded ->
+    $('#recommendations').masonry
+      itemSelector: '.box'
+      isFitWidth: true
