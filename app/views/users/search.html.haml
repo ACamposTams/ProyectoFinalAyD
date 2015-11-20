@@ -1,8 +1,6 @@
--if @search.nil?
-	No event found matching that search.
--else
-	%h2= "Search Results"
-	#events.transitions-enabled
+%h2= "Search Results"
+#events.transitions-enabled
+	-if @search.size != 0
 		-@search.each do |s|
 			.box.panel.panel-default
 				= link_to (image_tag s.image.url), s
@@ -16,19 +14,25 @@
 					%br
 					Tags:
 					= s.all_tags
-	%h2= "Suggestions"
-	#events.transitions-enabled
+	-else
+		%h4= "No results found"
+%br
+%h2= "Suggestions"
+
+#events.transitions-enabled
+	-if @recommendation.size != 0
 		-@recommendation.each do |s|
-			-if !s.nil?
-				.box.panel.panel-default
-					= link_to (image_tag s.image.url), s
-					.panel-body
-						%h2= link_to s.name, s
-						%p= s.datetime.to_date
-						%p= s.datetime.strftime("%I:%M%p")
-						Created by:
-						= s.user.first_name 
-						= s.user.last_name
-						%br
-						Tags:
-						= s.all_tags
+			.box.panel.panel-default
+				= link_to (image_tag s.image.url), s
+				.panel-body
+					%h2= link_to s.name, s
+					%p= s.datetime.to_date
+					%p= s.datetime.strftime("%I:%M%p")
+					Created by:
+					= s.user.first_name 
+					= s.user.last_name
+					%br
+					Tags:
+					= s.all_tags
+	-else
+		%h4= "No suggestions found"

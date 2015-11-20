@@ -11,64 +11,59 @@ class UsersController < ApplicationController
 		if @search_name == ""
 			@search = Event.all
 		else
-			@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{@search_name}%",  "%#{@search_name}%"])
+			@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{@search_name}%",  "%#{@search_name}%"]).uniq
 		end
 		Rails.logger.debug("My object: #{@search.inspect}")
-		# @similarEvents = Event.select("events.*").where(["tags LIKE ?", "%#{@search_name}%"])
 
-		@recommendation = Array.new(10)
+		@recommendation = Array.new()
+		@shown = Array.new()
+		@search.each do |e|
+			@shown[@shown.size] = e.id
+		end
 		@i = 0
 		@repeat = false
 
 		@search.each do |e|
 			@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id])
-
 			@eventVertices.each do |ev|
-			# @tempEvent = Vertex.where(["node_a = ? OR node_b = ?", e.id, e.id]).first
 				if !ev.nil?
 					@node = ev.node_a
-					# @node = Vertex.select("vertices.node_a").where("node_b = ?", e.id)
 					if @node == e.id
 						@event = Event.find(ev.node_b)
-
 						if !@event.nil?
-
-							@recommendation.each do |r|
+							@shown.each do |r|
 								if !r.nil?
-									if ((r.id == @event.id) || (@event.id == e.id))
+									if r == @event.id
 										@repeat = true
+										break
 									else
 										@repeat = false
 									end
 								end
 							end
-
 							if @repeat == false
-								if !(@event.id == e.id)
-									@recommendation[@i] = @event
-									@i = @i + 1
-								end
+								@recommendation[@i] = @event
+								@shown[@shown.size] = @event.id
+								@i = @i + 1
 							end
 						end
-						
 					else
 						@event = Event.find(@node)
 						if !@event.nil?
-							@recommendation.each do |r|
+							@shown.each do |r|
 								if !r.nil?
-									if ((r.id == @event.id) || (@event.id == e.id))
+									if r == @event.id
 										@repeat = true
+										break
 									else
 										@repeat = false
 									end
 								end
 							end
-							
 							if @repeat == false
-								if !(@event.id == e.id)
 									@recommendation[@i] = @event
+									@shown[@shown.size] = @event.id
 									@i = @i + 1
-								end
 							end
 						end
 					end
