@@ -15,9 +15,9 @@
 					Tags:
 					= s.all_tags
 	-else
-		%h4= "No results found"
+		%h4= "No Results Found"
 %br
-%h2= "Suggestions"
+%h2= "Suggestions Based On Your Search"
 
 #recommendations.transitions-enabled
 	-if @recommendation.size != 0
@@ -35,4 +35,4 @@
 					Tags:
 					= s.all_tags
 	-else
-		%h4= "No suggestions found"
+		%h4= "No Suggestions Found"

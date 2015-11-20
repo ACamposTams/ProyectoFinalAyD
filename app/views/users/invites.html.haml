@@ -1,3 +1,4 @@
+%h2= "Events You're Invited To"
 #invites.transitions-enabled
 	-if !@invites.nil?
 		-@invites.each do |s|
@@ -14,4 +15,4 @@
 					Tags:
 					= s.all_tags
 	-else
-		%h4= "No invitations found"
+		%h4= "No Invitations Found"

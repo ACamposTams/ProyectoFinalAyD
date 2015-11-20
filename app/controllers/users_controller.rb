@@ -1,15 +1,12 @@
 class UsersController < ApplicationController
-	# skip_before_filter :search, only: :show, :invites
-	skip_before_filter :invites, only: :show
+	skip_before_filter :search, only: :show
+	# skip_before_filter :invites, only: :show
+	#before_action :show, only: :invite
 
 	def show
 		@user = current_user
-
-		# search
-
 		@personalRec = Array.new()
 		@events = Event.all
-		@i = 0
 
 		if !@user.nil?
 			@user_tags = @user.tags
@@ -20,8 +17,7 @@ class UsersController < ApplicationController
 					
 					@eventTags.each do |et|
 						if (et.id == ut.id) && @personalRec.index(e).nil?
-							@personalRec[@i] = e
-							@i = @i +1
+							@personalRec[@personalRec.size] = e
 						end
 					end
 				end
@@ -40,60 +36,64 @@ class UsersController < ApplicationController
 		end
 		Rails.logger.debug("My object: #{@search.inspect}")
 
-		@recommendation = Array.new()
-		@shown = Array.new()
-		@search.each do |e|
-			@shown[@shown.size] = e.id
-		end
-		@i = 0
-		@repeat = false
+		@safe_net = Event.all
+		if @search != @safe_net.size
+			@recommendation = Array.new()
+			@shown = Array.new()
+			@search.each do |e|
+				@shown[@shown.size] = e.id
+			end
+			@repeat = false
 
-		@search.each do |e|
-			@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id])
-			@eventVertices.each do |ev|
-				if !ev.nil?
-					@node = ev.node_a
-					if @node == e.id
-						@event = Event.find(ev.node_b)
-						if !@event.nil?
-							@shown.each do |r|
-								if !r.nil?
-									if r == @event.id
-										@repeat = true
-										break
-									else
-										@repeat = false
+			@search.each do |e|
+				if @shown.size == @safe_net.size
+					break
+				else
+					@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id])
+					@eventVertices.each do |ev|
+						if !ev.nil?
+							@node = ev.node_a
+							if @node == e.id
+								@event = Event.find(ev.node_b)
+								if !@event.nil?
+									@shown.each do |r|
+										if !r.nil?
+											if r == @event.id
+												@repeat = true
+												break
+											else
+												@repeat = false
+											end
+										end
+									end
+									if @repeat == false
+										@recommendation[@recommendation.size] = @event
+										@shown[@shown.size] = @event.id
+									end
+								end
+							else
+								@event = Event.find(@node)
+								if !@event.nil?
+									@shown.each do |r|
+										if !r.nil?
+											if r == @event.id
+												@repeat = true
+												break
+											else
+												@repeat = false
+											end
+										end
+									end
+									if @repeat == false
+											@recommendation[@recommendation.size] = @event
+											@shown[@shown.size] = @event.id
 									end
 								end
 							end
-							if @repeat == false
-								@recommendation[@i] = @event
-								@shown[@shown.size] = @event.id
-								@i = @i + 1
-							end
 						end
-					else
-						@event = Event.find(@node)
-						if !@event.nil?
-							@shown.each do |r|
-								if !r.nil?
-									if r == @event.id
-										@repeat = true
-										break
-									else
-										@repeat = false
-									end
-								end
-							end
-							if @repeat == false
-									@recommendation[@i] = @event
-									@shown[@shown.size] = @event.id
-									@i = @i + 1
-							end
-						end
-					end
+					end	
 				end
-			end	
+			end
 		end
 
 		# @search.each do |s|

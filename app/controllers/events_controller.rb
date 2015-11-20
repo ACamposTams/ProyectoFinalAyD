@@ -13,7 +13,7 @@ class EventsController < ApplicationController
 
 	def show
 		@user = current_user
-		@invites = EventsUser.select("users.*").joins("JOIN users on users.id = events_users.user_id").where("events_users.event_id = ?", params[:id])
+		@invites = EventsUser.select("users.*").joins("JOIN users on users.id = events_users.user_id").where("events_users.event_id = ?", params[:id]).uniq
 		# render "events_users/invite"
 	end
 
@@ -72,7 +72,7 @@ class EventsController < ApplicationController
 		# @events_users = @event.EventsUser.build
 		@events_users = @event.EventsUser.build(:user_id => nil)
 		# @users = User.all
-		@all_users = User.all
+		@all_users = User.all.where("users.id != ?", current_user.id)
 		# @all_users = User.all.map { |u| [u.id, u.email] }
 		# if !params[:user].nil? or !params[:id].nil?
 			# unless params[:users][:id].nil? 
@@ -81,7 +81,7 @@ class EventsController < ApplicationController
 					@event.eventsusers.build(:user_id => u)
 				end 
 			end
-		
+		redirect_to @event
 		# end
 
 		# if User.find(params[:invitee])
@@ -126,6 +126,8 @@ class EventsController < ApplicationController
 
 	def find_event
 		@event = Event.find(params[:id])
+		rescue ActiveRecord::RecordNotFound
+			redirect_to root_url, notice: 'Event not found'
 	end
 
 	def all_tags=(names)

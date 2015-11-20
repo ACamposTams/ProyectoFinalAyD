@@ -13,3 +13,9 @@ $ ->
     $('#recommendations').masonry
       itemSelector: '.box'
       isFitWidth: true
+
+$ ->
+  $('#invites').imagesLoaded ->
+    $('#invites').masonry
+      itemSelector: '.box'
+      isFitWidth: true

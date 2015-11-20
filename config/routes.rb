@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  devise_for :users, :controllers => { registrations: 'registrations'}
+  devise_for :users, :controllers => { registrations: 'registrations'}, :except => [:invites]
+  get '/users/invites' => 'users#invites'
   resources :events
   resources :events_users
   resources :users
@@ -13,4 +14,6 @@ Rails.application.routes.draw do
   get 'tags/:tag', to: 'events#index', as: "tag"
   
   root "events#index"
+
+  get '*unmatched_route', :to => 'events#index', notice: "Unmatched Route"
 end

@@ -2,7 +2,7 @@
 	= text_field_tag(:search)
 	= submit_tag("Search")
 
-%h2= "Suggestions for you"
+%h2= "Suggestions Based On Your Interests"
 #recommendations.transitions-enabled
 	-if @personalRec.size != 0
 		-@personalRec.each do |s|
@@ -19,4 +19,4 @@
 					Tags:
 					= s.all_tags
 	-else
-		%h4= "No suggestions found"
+		%h4= "No Suggestions Found, You Should Add Tags To Your Account"
