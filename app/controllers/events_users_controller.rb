@@ -28,6 +28,7 @@ class EventsUsersController < ApplicationController
               EventsUser.create(:event_id => @event.id, :user_id => u, :owner => @event.user_id)
             end 
           end
+        redirect_to @event
       end
       
     
@@ -39,7 +40,7 @@ class EventsUsersController < ApplicationController
     # else
     #   redirect_to @event, notice: "Error"
     # end
-    redirect_to @event
+    #redirect_to @event
   end
 
   # GET /events_users/new

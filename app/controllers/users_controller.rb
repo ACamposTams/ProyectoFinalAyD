@@ -12,7 +12,6 @@ class UsersController < ApplicationController
 		if !@user.nil?
 			if @invitedTo.nil?
 				@user_tags = @user.tags
-				
 				@events.each do |e|	
 					@eventTags = e.tags
 					@user_tags.each do |ut|
