@@ -7,21 +7,46 @@ class UsersController < ApplicationController
 		@user = current_user
 		@personalRec = Array.new()
 		@events = Event.all
+		@invitedTo = EventsUser.all.where("user_id = ?", current_user.id)
 
 		if !@user.nil?
-			@user_tags = @user.tags
-			
-			@events.each do |e|	
-				@eventTags = e.tags
-				@user_tags.each do |ut|
-					
-					@eventTags.each do |et|
-						if (et.id == ut.id) && @personalRec.index(e).nil?
-							@personalRec[@personalRec.size] = e
+			if @invitedTo.nil?
+				@user_tags = @user.tags
+				
+				@events.each do |e|	
+					@eventTags = e.tags
+					@user_tags.each do |ut|
+						
+						@eventTags.each do |et|
+							if (et.id == ut.id) && @personalRec.index(e).nil?
+								@personalRec[@personalRec.size] = e
+							end
+						end
+					end
+				end
+			else
+				@invitedTo.each do |e|
+					@vertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
+					@vertices.each do |v|
+						if !v.nil?
+							@node = v.node_a
+							if @node == e.id
+								@event = Event.find(e.node_b)
+							else
+								@event = Event.find(@node)
+							end
+
+							if !@event.nil?
+								if @repeat == false
+									@personalRec[@personalRec.size] = @event
+								end
+							end
+
 						end
 					end
 				end
 			end
+
 		end
 
 	end
@@ -34,7 +59,6 @@ class UsersController < ApplicationController
 		else
 			@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{@search_name}%",  "%#{@search_name}%"]).uniq
 		end
-		Rails.logger.debug("My object: #{@search.inspect}")
 
 		@safe_net = Event.all
 		if @search != @safe_net.size
@@ -49,45 +73,30 @@ class UsersController < ApplicationController
 				if @shown.size == @safe_net.size
 					break
 				else
-					@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id])
+					@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
 					@eventVertices.each do |ev|
 						if !ev.nil?
 							@node = ev.node_a
 							if @node == e.id
 								@event = Event.find(ev.node_b)
-								if !@event.nil?
-									@shown.each do |r|
-										if !r.nil?
-											if r == @event.id
-												@repeat = true
-												break
-											else
-												@repeat = false
-											end
-										end
-									end
-									if @repeat == false
-										@recommendation[@recommendation.size] = @event
-										@shown[@shown.size] = @event.id
-									end
-								end
 							else
 								@event = Event.find(@node)
-								if !@event.nil?
-									@shown.each do |r|
-										if !r.nil?
-											if r == @event.id
-												@repeat = true
-												break
-											else
-												@repeat = false
-											end
+							end
+
+							if !@event.nil?
+								@shown.each do |r|
+									if !r.nil?
+										if r == @event.id
+											@repeat = true
+											break
+										else
+											@repeat = false
 										end
 									end
-									if @repeat == false
-											@recommendation[@recommendation.size] = @event
-											@shown[@shown.size] = @event.id
-									end
+								end
+								if @repeat == false
+									@recommendation[@recommendation.size] = @event
+									@shown[@shown.size] = @event.id
 								end
 							end
 						end

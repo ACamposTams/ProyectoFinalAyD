@@ -31,7 +31,10 @@
 										= link_to "Edit", edit_event_path, class: "btn btn-default"
 										= link_to "Delete", event_path, method: :delete, data: { confirm: "Are you sure?"}, class: "btn btn-default"
 									- else
-										= link_to "Assist", event_path, class: "btn btn-default" #agregar el usuario al evento
+										- if @going
+											= link_to "Not going", event_path(@event, :assisting => '0'), class: "btn btn-default" #agregar el usuario al evento
+										- else
+											= link_to "Assist", event_path(@event, :assisting => '1'), class: "btn btn-default" #agregar el usuario al evento
 	.col-md-8.col-md-offset-2
 		.panel.panel-default
 			.panel-heading.event_image
