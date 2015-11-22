@@ -52,11 +52,16 @@ class UsersController < ApplicationController
 
 	def search
 		@search_name = params[:search]
+		@search_name = @search_name.split(" ")
+		Rails.logger.debug("SEARCHNAME: #{@search_name.inspect}")
+		@search = Array.new()
 
 		if @search_name == ""
 			@search = Event.all
 		else
-			@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{@search_name}%",  "%#{@search_name}%"]).uniq
+			@search_name.each do |s|
+				@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{s}%",  "%#{s}%"]).uniq
+			end
 		end
 
 		@safe_net = Event.all

@@ -29,10 +29,12 @@ class EventsController < ApplicationController
 				if !@eventUser.nil?
 					if @assisting == '1'
 						@eventUser.status = 'going'
+						@eventUser.save
 					else
+						# @newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status=>'not going')
 						@eventUser.status = 'not going'
+						@eventUser.save
 					end
-					@eventUser.save
 				else
 					@newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status=>'going')
 				end
