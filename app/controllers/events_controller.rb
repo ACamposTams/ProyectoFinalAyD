@@ -12,30 +12,32 @@ class EventsController < ApplicationController
 	end
 
 	def show
-		@user = current_user
-		@invites = EventsUser.select("users.*").joins("JOIN users on users.id = events_users.user_id").where("events_users.event_id = ?", params[:id]).uniq
-		@assisting = params[:assisting]
-		@going  = false
-		@eventUser = EventsUser.select("events_users.*").where("events_users.event_id = ? AND events_users.user_id = ?", @event.id, current_user.id).first
-		if !@eventUser.nil?
-			@assistance = @eventUser.status
-			if @assistance == 'going'
-				@going = true
-			end
-		end
-
-		if !@assisting.nil?
+		if user_signed_in?
+			@user = current_user
+			@invites = EventsUser.select("users.*").joins("JOIN users on users.id = events_users.user_id").where("events_users.event_id = ?", params[:id]).uniq
+			@assisting = params[:assisting]
+			@going  = false
+			@eventUser = EventsUser.select("events_users.*").where("events_users.event_id = ? AND events_users.user_id = ?", @event.id, current_user.id).first
 			if !@eventUser.nil?
-				if @assisting == '1'
-					@eventUser.status = 'going'
-				else
-					@eventUser.status = 'not going'
+				@assistance = @eventUser.status
+				if @assistance == 'going'
+					@going = true
 				end
-				@eventUser.save
-			else
-				@newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status=>'going')
 			end
 
+			if !@assisting.nil?
+				if !@eventUser.nil?
+					if @assisting == '1'
+						@eventUser.status = 'going'
+					else
+						@eventUser.status = 'not going'
+					end
+					@eventUser.save
+				else
+					@newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status=>'going')
+				end
+
+			end
 		end
 		# render "events_users/invite"
 	end

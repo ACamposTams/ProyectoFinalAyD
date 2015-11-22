@@ -35,15 +35,16 @@
 											= link_to "Not going", event_path(@event, :assisting => '0'), class: "btn btn-default" #agregar el usuario al evento
 										- else
 											= link_to "Assist", event_path(@event, :assisting => '1'), class: "btn btn-default" #agregar el usuario al evento
-	.col-md-8.col-md-offset-2
-		.panel.panel-default
-			.panel-heading.event_image
-				.panel-heading-text
-					%h1= "Guests"
-			.panel-body
-				%p
-				-@invites.each do |i|
-					.slide 
-					= i.first_name
-					= i.last_name 
+	- if user_signed_in?
+		.col-md-8.col-md-offset-2
+			.panel.panel-default
+				.panel-heading.event_image
+					.panel-heading-text
+						%h1= "Guests"
+				.panel-body
+					%p
+					-@invites.each do |i|
+						.slide 
+						= i.first_name
+						= i.last_name 
 				
