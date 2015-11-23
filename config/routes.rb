@@ -3,12 +3,14 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => { registrations: 'registrations'}, :except => [:invites, :stats]
   get '/users/stats' => 'users#stats'
   get '/users/invites' => 'users#invites'
+  get '/users/stats.pdf' => 'users#stats'
   resources :events
   resources :events_users
   resources :users
 
   get '/users/invites' => 'users#invites', :as => :invites_users
   get '/users/stats' => 'users#stats', :as => :stats_users
+  get '/users/stats.pdf' => 'users#stats', :as => :statspdf_users
   get '/users/show' => 'users#show', :as => :show_users
   get '/search' => 'users#search', :as => :search
 
