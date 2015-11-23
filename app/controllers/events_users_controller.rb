@@ -25,11 +25,12 @@ class EventsUsersController < ApplicationController
       if !params[:users].nil?
         params[:users][:id].each do |u| 
             if !u.empty?
-              EventsUser.create(:event_id => @event.id, :user_id => u, :owner => @event.user_id)
+              EventsUser.create(:event_id => @event.id, :user_id => u)
             end 
           end
         redirect_to @event
       end
+      
       
     
     # end

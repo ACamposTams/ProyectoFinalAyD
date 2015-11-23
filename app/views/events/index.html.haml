@@ -1,14 +1,33 @@
-#events.transitions-enabled
-	- @events.each do |event|
-		.box.panel.panel-default
-			= link_to (image_tag event.image.url), event
-			.panel-body
-				%h2= link_to event.name, event
-				%p= event.datetime.to_date
-				%p= event.datetime.strftime("%I:%M%p")
-				Created by:
-				= event.user.first_name 
-				= event.user.last_name
-				%br
-				Tags:
-				= event.all_tags
+-if user_signed_in?
+	%h2= "Your Events"
+	#events.transitions-enabled
+		- @events.each do |event|
+			-if event.user_id == current_user.id
+				.box.panel.panel-default
+					= link_to (image_tag event.image.url), event
+					.panel-body
+						%h2= link_to event.name, event
+						%p= event.datetime.to_date
+						%p= event.datetime.strftime("%I:%M%p")
+						Created by:
+						= event.user.first_name 
+						= event.user.last_name
+						%br
+						Tags:
+						= event.all_tags
+- else
+	%h2= "Available Events"
+	#events.transitions-enabled
+		- @events.each do |event|
+			.box.panel.panel-default
+				= link_to (image_tag event.image.url), event
+				.panel-body
+					%h2= link_to event.name, event
+					%p= event.datetime.to_date
+					%p= event.datetime.strftime("%I:%M%p")
+					Created by:
+					= event.user.first_name 
+					= event.user.last_name
+					%br
+					Tags:
+					= event.all_tags

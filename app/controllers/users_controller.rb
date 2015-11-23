@@ -7,15 +7,15 @@ class UsersController < ApplicationController
 		@user = current_user
 		@personalRec = Array.new()
 		@events = Event.all
-		@invitedTo = EventsUser.all.where("user_id = ?", current_user.id)
+		@invitedTo = EventsUser.all.where("user_id = ? AND status = 'not going'", current_user.id)
+		repeat = false
 
 		if !@user.nil?
 			if @invitedTo.nil?
 				@user_tags = @user.tags
-				@events.each do |e|	
+				@events.each do |e|
 					@eventTags = e.tags
 					@user_tags.each do |ut|
-						
 						@eventTags.each do |et|
 							if (et.id == ut.id) && @personalRec.index(e).nil?
 								@personalRec[@personalRec.size] = e
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
 				@invitedTo.each do |e|
 					@vertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
 					@vertices.each do |v|
-						if @i == 10
+						if @i==10
 							break
 						else
 							if !v.nil?
@@ -38,22 +38,30 @@ class UsersController < ApplicationController
 								else
 									@event = Event.find(@node)
 								end
-
-								if !@event.nil?
-									if @repeat == false
+								if !@event.nil? && @event.user_id != @user.id
+									#if @repeat == false
 										@personalRec[@personalRec.size] = @event
-										@i = @i +1
-									end
+										@i = @i + 1
+									#end
 								end
-
+							end
+						end
+					end
+				end
+				@user_tags = @user.tags
+				@events.each do |e|
+					@eventTags = e.tags
+					@user_tags.each do |ut|
+						@eventTags.each do |et|
+							@invited = EventsUser.select("events_users.*").where(["event_id = ? AND user_id = ?", e.id, @user.id]).uniq
+							if (et.id == ut.id) && @personalRec.index(e).nil? && e.user_id != @user.id && @invited.nil? 
+								@personalRec[@personalRec.size] = e
 							end
 						end
 					end
 				end
 			end
-
 		end
-
 	end
 
 	def search
@@ -144,17 +152,7 @@ class UsersController < ApplicationController
 	end
 
 	def stats
-		@events = Event.select("events.*, events_users.*").joins("JOIN events_users ON events_users.event_id = events.id").where("events_users.owner = ?", current_user.id).uniq
-		# @userEvents = Event.select("events_users.*").joins("JOIN users ON users.id = events.user_id JOIN events_users ON events_users.user_id = users.id").where("events_users.event_id = ?", e.id).uniq
-
-		# @events.each do |e|
-		# 	@sumInvites = EventsUser.where("event_id = ? AND owner != ?", e.id, current_user.id).count 
-		# 	@sumGoing =  EventsUser.where("event_id = ? AND owner != ? AND status = ?", e.id, current_user.id, 'going').count
-		# 	@sumI[@sumI.size] = @sumInvites
-		# 	@sumG[@sumG.size] = @sumGoing
-		# end
-
-
+		@events = Event.select("events_users.*").joins("JOIN events_users ON events_users.event_id = events.id").where("events_users.owner = ?", current_user.id).uniq
 		Rails.logger.debug("USEREVENTSS: #{@sumInvites.inspect}")
 	end
 

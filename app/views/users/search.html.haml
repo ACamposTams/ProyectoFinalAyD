@@ -18,8 +18,6 @@
 		%h4= "No Results Found"
 %br
 %h2= "Suggestions Based On Your Search"
-= @i
-= @verga
 #recommendations.transitions-enabled
 	-if @recommendation.size != 0
 		-@recommendation.each do |s|

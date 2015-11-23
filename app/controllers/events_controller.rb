@@ -14,7 +14,7 @@ class EventsController < ApplicationController
 	def show
 		if user_signed_in?
 			@user = current_user
-			@invites = EventsUser.select("users.*").joins("JOIN users on users.id = events_users.user_id").where("events_users.event_id = ?", params[:id]).uniq
+			@invites = EventsUser.select("users.*").joins("JOIN users on users.id = events_users.user_id AND events_users.status = 'going'").where("events_users.event_id = ?", params[:id]).uniq
 			@assisting = params[:assisting]
 			@going  = false
 			@eventUser = EventsUser.select("events_users.*").where("events_users.event_id = ? AND events_users.user_id = ?", @event.id, current_user.id).first
@@ -34,12 +34,11 @@ class EventsController < ApplicationController
 					end
 					@eventUser.save
 				else
-					@newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status=>'going')
+					@newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status =>'going')
 				end
-
+				redirect_to @event, notice: "Succesfully altered your attendance status"
 			end
 		end
-		# render "events_users/invite"
 	end
 
 	def new
@@ -62,7 +61,7 @@ class EventsController < ApplicationController
 		#@event.save
 		
 		if @event.save
-			@newUserEvent = EventsUser.create(:event_id=>@event.id, :user_id=>@event.user_id, :owner=>@event.user_id)
+			@newUserEvent = EventsUser.create(:event_id=>@event.id, :user_id=>@event.user_id, :owner=>@event.user_id, :status=>'not going')
 			@node = Node.create(:node_id => @event.id, :num_vertices=>0)
 			#@tagsA = @node.all(select("events.all_tags").joins("JOIN events on event.id = nodes.node_id").where("events.id = ?", @node.id))
 			@tagsA = @event.tags #esta es la que deberiamos usar si podemos llamar la funcion tag
@@ -171,6 +170,12 @@ class EventsController < ApplicationController
 		@vertexes.each do |v|
 			if v.node_a == @node.id || v.node_b == @node.id
 				v.destroy
+			end
+		end
+
+		@events_users.each do |t|
+			if t.event_id == @node.id
+				t.destroy
 			end
 		end
 
