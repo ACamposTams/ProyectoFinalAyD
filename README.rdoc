@@ -1,28 +1,10 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Tiempos de ejecución calculados en users_controller.rb, en las funciones show and search, nombrado @totalTime.
 
-Things you may want to cover:
+Tiempo de ejecución de recomendaciones de usuarios (10 eventos): 0.016159s
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Tiempo de ejecución de recomendaciones de búsqueda de eventos (10 eventos): 0.00488s
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+
