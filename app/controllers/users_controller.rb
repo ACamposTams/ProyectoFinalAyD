@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 								end
 
 								if !@event.nil?
-									if @repeat == false
+									if @repeat == false && @event.user_id != current_user.id
 										@personalRec[@personalRec.size] = @event
 										@i = @i +1
 									end
@@ -216,11 +216,12 @@ class UsersController < ApplicationController
 	def invites 
 		@invites = EventsUser.select("events_users.*").where("events_users.user_id = ?", current_user.id).uniq
 		@myInvites = Array.new()
-
 		@invites.each do |i|
 			if i.owner != current_user.id
 				@event = Event.select("events.*").where("events.id = ?", i.event_id)
-				@myInvites[@myInvites.size] = @event
+				@event.each do |e|
+					@myInvites[@myInvites.size] = e
+				end
 			end
 		end
 	end
