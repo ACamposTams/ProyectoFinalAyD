@@ -24,23 +24,29 @@ class UsersController < ApplicationController
 					end
 				end
 			else
+				@i = 0
 				@invitedTo.each do |e|
 					@vertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
 					@vertices.each do |v|
-						if !v.nil?
-							@node = v.node_a
-							if @node == e.id
-								@event = Event.find(e.node_b)
-							else
-								@event = Event.find(@node)
-							end
-
-							if !@event.nil?
-								if @repeat == false
-									@personalRec[@personalRec.size] = @event
+						if @i == 10
+							break
+						else
+							if !v.nil?
+								@node = v.node_a
+								if @node == e.id
+									@event = Event.find(e.node_b)
+								else
+									@event = Event.find(@node)
 								end
-							end
 
+								if !@event.nil?
+									if @repeat == false
+										@personalRec[@personalRec.size] = @event
+										@i = @i +1
+									end
+								end
+
+							end
 						end
 					end
 				end
@@ -135,6 +141,25 @@ class UsersController < ApplicationController
 		# 		end
 		# 	end
 		# end
+	end
+
+	def stats
+		@events = Event.select("events.*, events_users.*").joins("JOIN events_users ON events_users.event_id = events.id").where("events_users.owner = ?", current_user.id).uniq
+		@userEvents = Array.new()
+		# @userEvents = Event.select("events_users.*").joins("JOIN users ON users.id = events.user_id JOIN events_users ON events_users.user_id = users.id").where("events_users.event_id = ?", e.id).uniq
+		@sumI = Array.new()
+		@sumG = Array.new()
+		@i = 0
+
+		# @events.each do |e|
+		# 	@sumInvites = EventsUser.where("event_id = ? AND owner != ?", e.id, current_user.id).count 
+		# 	@sumGoing =  EventsUser.where("event_id = ? AND owner != ? AND status = ?", e.id, current_user.id, 'going').count
+		# 	@sumI[@sumI.size] = @sumInvites
+		# 	@sumG[@sumG.size] = @sumGoing
+		# end
+
+
+		Rails.logger.debug("USEREVENTSS: #{@sumInvites.inspect}")
 	end
 
 	def invites 

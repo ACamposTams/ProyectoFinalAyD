@@ -29,7 +29,8 @@ gem 'masonry-rails', '~> 0.2.4'
 gem 'date_validator', '~> 0.8.1'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-
+gem 'prawn', '~> 2.0', '>= 2.0.2'
+gem 'prawnto', '~> 0.1.1'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -1,0 +1,19 @@
+<h3><%= "#{current_user.first_name} #{current_user.last_name} Event Statistics" %></h3>
+
+<table>
+	<tr>
+		<th>Event</th>
+		<th>Date and Time</th>
+		<th>Invites</th>
+		<th>Going</th>
+	</tr>
+	<% @events.each do |e| %>
+	<tr>
+		<td width="200px" align = "center"><%= e.name %></td>
+		<td width="200px" align = "center"><%= e.datetime %></td>
+		<% @sumInvites = EventsUser.where("event_id = ? AND owner != ?", e.id, current_user.id).count %>
+		<td width="200px" align = "center"><%= "#{@sumInvites}" %></td>
+		<% @sumGoing =  EventsUser.where("event_id = ? AND owner != ? AND status = ?", e.id, current_user.id, 'going').count %>
+		<td width="200px" align = "center"><%= "#{@sumGoing}" %></td>
+	</tr>
+	<% end %>
