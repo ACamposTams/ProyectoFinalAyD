@@ -29,12 +29,10 @@ class EventsController < ApplicationController
 				if !@eventUser.nil?
 					if @assisting == '1'
 						@eventUser.status = 'going'
-						@eventUser.save
 					else
-						# @newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status=>'not going')
 						@eventUser.status = 'not going'
-						@eventUser.save
 					end
+					@eventUser.save
 				else
 					@newEventUser = EventsUser.create(:event_id => @event.id, :user_id => current_user.id, :status=>'going')
 				end
@@ -52,9 +50,16 @@ class EventsController < ApplicationController
 	end
 
 	def create
-		@event = current_user.events.build(ev_params)
+		@event = Event.new(ev_params) #current_user.events.build(ev_params)
 		@event.user_id = current_user.id
-		@event.save
+
+		if @event.valid?
+			@event.save
+		else
+			#@event.error
+		end
+
+		#@event.save
 		
 		if @event.save
 			@newUserEvent = EventsUser.create(:event_id=>@event.id, :user_id=>@event.user_id, :owner=>@event.user_id)
@@ -124,9 +129,37 @@ class EventsController < ApplicationController
 
 	def update
 		if @event.update(ev_params)
+			@vertexes = Vertex.all
+			@node = Node.find(@event.id)
+			@vertexes.each do |v|
+				if v.node_a == @node.id || v.node_b == @node.id
+					v.destroy
+				end
+			end
 			redirect_to @event, notice: "Event was succesfully updated"
-		else
-			render 'edit'
+			@tagsA = @event.tags
+			@nodes = Node.all
+			@weight = 0
+
+			@nodes.each do |n| 
+				@tempEvent = Event.find(n.node_id)
+				if @tempEvent.id != @event.id
+					@tagsB = @tempEvent.tags # esta es la funcion que deberiamos usar
+					#@tagsB = @tempEvent.all(select("events.tags").joins("JOIN events on event.id = nodes.node_id").where("events.id = ?", @tempEvent.id))
+					@weight = 0
+					@tagsA.each do |tagA|
+						@tagsB.each do |tagB|
+							if tagA == tagB
+								@weight = @weight + 1
+							end
+						end
+					end
+
+					if @weight > 0
+						@vertex = Vertex.create(:node_a => @node.id, :node_b => @tempEvent.id, :weight => @weight)
+					end
+				end
+			end
 		end
 	end
 

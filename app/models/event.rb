@@ -11,6 +11,9 @@ class Event < ActiveRecord::Base
 	Time.zone = "Mexico City"
 
 	validates :datetime, date: {after_or_equal_to: Proc.new {Time.zone.now}}
+	validates :name, presence: true
+	validates :location, presence: true
+	validates :all_tags, presence: true
 
 	has_attached_file :image, styles: { medium: "300x300>" }
 	validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
