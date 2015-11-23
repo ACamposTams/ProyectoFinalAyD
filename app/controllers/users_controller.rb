@@ -60,7 +60,7 @@ class UsersController < ApplicationController
 			@search = Event.all
 		else
 			@search_name.each do |s|
-				@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{s}%",  "%#{s}%"]).uniq.limit(10)
+				@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{s}%",  "%#{s}%"]).uniq
 			end
 		end
 
@@ -72,6 +72,7 @@ class UsersController < ApplicationController
 				@shown[@shown.size] = e.id
 			end
 			@repeat = false
+			@i = 0
 
 			@search.each do |e|
 				if @shown.size == @safe_net.size
@@ -80,27 +81,32 @@ class UsersController < ApplicationController
 					@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
 					@eventVertices.each do |ev|
 						if !ev.nil?
-							@node = ev.node_a
-							if @node == e.id
-								@event = Event.find(ev.node_b)
+							if @i == 10
+								break
 							else
-								@event = Event.find(@node)
-							end
+								@node = ev.node_a
+								if @node == e.id
+									@event = Event.find(ev.node_b)
+								else
+									@event = Event.find(@node)
+								end
 
-							if !@event.nil?
-								@shown.each do |r|
-									if !r.nil?
-										if r == @event.id
-											@repeat = true
-											break
-										else
-											@repeat = false
+								if !@event.nil?
+									@shown.each do |r|
+										if !r.nil?
+											if r == @event.id
+												@repeat = true
+												break
+											else
+												@repeat = false
+											end
 										end
 									end
-								end
-								if @repeat == false
-									@recommendation[@recommendation.size] = @event
-									@shown[@shown.size] = @event.id
+									if @repeat == false
+										@recommendation[@recommendation.size] = @event
+										@shown[@shown.size] = @event.id
+										@i = @i +1
+									end
 								end
 							end
 						end
