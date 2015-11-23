@@ -12,8 +12,11 @@ class User < ActiveRecord::Base
 
   def all_tags=(names)
   		self.tags = names.split(",").map do |name|
-      		Tag.where(name: name.strip).first_or_create!
+      		tag = Tag.where(name: name.strip).first_or_create!
+          # self.taggings.create(tag: tag) if tag.valid?
   		end
+      #self.taggings_ids = self.tags.pluck(:id)
+      #self.save
 	end
 
 	def all_tags
