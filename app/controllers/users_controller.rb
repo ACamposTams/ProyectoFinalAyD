@@ -7,15 +7,16 @@ class UsersController < ApplicationController
 		@user = current_user
 		@personalRec = Array.new()
 		@events = Event.all
-		@invitedTo = EventsUser.all.where("user_id = ? AND status = 'not going'", current_user.id)
-		repeat = false
+		@invitedTo = EventsUser.all.where("user_id = ?", current_user.id).uniq
+		@repeat = false
 
 		if !@user.nil?
 			if @invitedTo.nil?
 				@user_tags = @user.tags
-				@events.each do |e|
+				@events.each do |e|	
 					@eventTags = e.tags
 					@user_tags.each do |ut|
+						
 						@eventTags.each do |et|
 							if (et.id == ut.id) && @personalRec.index(e).nil?
 								@personalRec[@personalRec.size] = e
@@ -26,57 +27,113 @@ class UsersController < ApplicationController
 			else
 				@i = 0
 				@invitedTo.each do |e|
-					@vertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
+					@vertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.event_id, e.event_id]).order(weight: :desc)
 					@vertices.each do |v|
-						if @i==10
+						if @i == 10
 							break
 						else
 							if !v.nil?
 								@node = v.node_a
-								if @node == e.id
-									@event = Event.find(e.node_b)
+								if @node == e.event_id
+									@event = Event.find(v.node_b)
 								else
 									@event = Event.find(@node)
 								end
-								if !@event.nil? && @event.user_id != @user.id
-									#if @repeat == false
-										@personalRec[@personalRec.size] = @event
-										@i = @i + 1
-									#end
+
+								@personalRec.each do |p|
+									if p.id == @event.id || p.user_id == current_user.id
+										@repeat = true
+										break
+									end
 								end
-							end
-						end
-					end
-				end
-				@user_tags = @user.tags
-				@events.each do |e|
-					@eventTags = e.tags
-					@user_tags.each do |ut|
-						@eventTags.each do |et|
-							@invited = EventsUser.select("events_users.*").where(["event_id = ? AND user_id = ?", e.id, @user.id]).uniq
-							if (et.id == ut.id) && @personalRec.index(e).nil? && e.user_id != @user.id && @invited.nil? 
-								@personalRec[@personalRec.size] = e
+
+								if !@event.nil?
+									if @repeat == false
+										@personalRec[@personalRec.size] = @event
+										@i = @i +1
+									end
+								end
+
 							end
 						end
 					end
 				end
 			end
+
 		end
+		# @user = current_user
+		# @personalRec = Array.new()
+		# @events = Event.all
+		# @invitedTo = EventsUser.all.where("user_id = ? AND status = 'not going'", current_user.id)
+		# repeat = false
+
+		# if !@user.nil?
+		# 	if @invitedTo.nil?
+		# 		@user_tags = @user.tags
+		# 		@events.each do |e|
+		# 			@eventTags = e.tags
+		# 			@user_tags.each do |ut|
+		# 				@eventTags.each do |et|
+		# 					if (et.id == ut.id) && @personalRec.index(e).nil?
+		# 						@personalRec[@personalRec.size] = e
+		# 					end
+		# 				end
+		# 			end
+		# 		end
+		# 	else
+		# 		@i = 0
+		# 		@invitedTo.each do |e|
+		# 			@vertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
+		# 			@vertices.each do |v|
+		# 				if @i==10
+		# 					break
+		# 				else
+		# 					if !v.nil?
+		# 						@node = v.node_a
+		# 						if @node == e.id
+		# 							@event = Event.find(e.node_b)
+		# 						else
+		# 							@event = Event.find(@node)
+		# 						end
+		# 						if !@event.nil? && @event.user_id != @user.id
+		# 							#if @repeat == false
+		# 								@personalRec[@personalRec.size] = @event
+		# 								@i = @i + 1
+		# 							#end
+		# 						end
+		# 					end
+		# 				end
+		# 			end
+		# 		end
+		# 		@user_tags = @user.tags
+		# 		@events.each do |e|
+		# 			@eventTags = e.tags
+		# 			@user_tags.each do |ut|
+		# 				@eventTags.each do |et|
+		# 					@invited = EventsUser.select("events_users.*").where(["event_id = ? AND user_id = ?", e.id, @user.id]).uniq
+		# 					if (et.id == ut.id) && @personalRec.index(e).nil? && e.user_id != @user.id && @invited.nil? 
+		# 						@personalRec[@personalRec.size] = e
+		# 					end
+		# 				end
+		# 			end
+		# 		end
+		# 	end
+		# end
 	end
 
 	def search
 		@search_name = params[:search]
-		@search_name = @search_name.split(" ")
-		Rails.logger.debug("SEARCHNAME: #{@search_name.inspect}")
 		@search = Array.new()
 
 		if @search_name == ""
 			@search = Event.all
 		else
+			@search_name = @search_name.split(" ")
 			@search_name.each do |s|
 				@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{s}%",  "%#{s}%"]).uniq
 			end
 		end
+		Rails.logger.debug("SEARCHSEARCH: #{@search.inspect}")
 
 		@safe_net = Event.all
 		if @search != @safe_net.size
@@ -157,7 +214,8 @@ class UsersController < ApplicationController
 	end
 
 	def invites 
-		@invites = Event.select("events.*").joins("JOIN events_users ON events.id = events_users.event_id").where("events_users.user_id = ? AND events_users.owner != ?", current_user.id, current_user.id).uniq
+		@invites = Event.select("events.*").joins("JOIN events_users ON events.id = events_users.event_id").where("events_users.user_id = ? AND events_users.owner != ? OR events_users.owner = ?", current_user.id, current_user.id, nil).uniq
+		@invites = EventsUser.select("events_users.*").where("events_users.user_id = ? AND events_users.owner != ?", current_user.id, current_user.id).uniq
 	end
 
 	def all_tags=(names)
