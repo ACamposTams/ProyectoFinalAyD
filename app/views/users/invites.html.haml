@@ -1,7 +1,7 @@
 %h2= "Events You're Invited To"
 #invites.transitions-enabled
-	-if !@invites.nil?
-		-@invites.each do |s|
+	-if @myInvites.size != 0
+		-@myInvites.each do |s|
 			.box.panel.panel-default
 				= link_to (image_tag s.image.url), s
 				.panel-body

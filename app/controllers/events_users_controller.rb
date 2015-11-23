@@ -21,11 +21,27 @@ class EventsUsersController < ApplicationController
     # @all_users = User.all.map { |u| [u.id, u.email] }
     # if !params[:user].nil? or !params[:id].nil?
       # unless params[:users][:id].nil? 
+      @found = false
 
       if !params[:users].nil?
         params[:users][:id].each do |u| 
             if !u.empty?
-              EventsUser.create(:event_id => @event.id, :user_id => u)
+              @id = u.to_i
+              @inviteFound = EventsUser.select("events_users.*").where("events_users.user_id = ?", u)
+              Rails.logger.debug("INVITEFOUND: #{@inviteFound.inspect}")
+              @in
+              if !@inviteFound.nil?
+                @inviteFound.each do |i|
+                  if i.event_id == @event.id
+                    @found = true
+                    break
+                  end
+                end
+
+                if @found == false
+                  EventsUser.create(:event_id => @event.id, :user_id => u)
+                end
+              end
             end 
           end
         redirect_to @event

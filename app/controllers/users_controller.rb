@@ -214,8 +214,15 @@ class UsersController < ApplicationController
 	end
 
 	def invites 
-		@invites = Event.select("events.*").joins("JOIN events_users ON events.id = events_users.event_id").where("events_users.user_id = ? AND events_users.owner != ? OR events_users.owner = ?", current_user.id, current_user.id, nil).uniq
-		@invites = EventsUser.select("events_users.*").where("events_users.user_id = ? AND events_users.owner != ?", current_user.id, current_user.id).uniq
+		@invites = EventsUser.select("events_users.*").where("events_users.user_id = ?", current_user.id).uniq
+		@myInvites = Array.new()
+
+		@invites.each do |i|
+			if i.owner != current_user.id
+				@event = Event.select("events.*").where("events.id = ?", i.event_id)
+				@myInvites[@myInvites.size] = @event
+			end
+		end
 	end
 
 	def all_tags=(names)
