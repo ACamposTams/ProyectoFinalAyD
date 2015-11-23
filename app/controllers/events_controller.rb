@@ -84,6 +84,21 @@ class EventsController < ApplicationController
 						end
 					end
 
+					@eventAWords = @event.description.split(" ")
+					@eventBWords = @tempEvent.description.split(" ")
+
+					if @weight > 0
+						@eventAWords.each do |wordsA|
+							@eventBWords.each do |wordsB|
+								if wordsA == wordsB
+									if wordsA != 'the' || wordsA != 'and' || wordsA != 'a' || wordsA != 'or' || wordsA != 'super' || wordsA != 'fantastic' || wordsA != 'awesome' || wordsA != 'my' || wordsA != 'mine' || wordsA != 'our' || wordsA != 'ours' || wordsA != 'we' || wordsA != 'I'       
+										@weight = @weight + 0.3
+									end   
+								end
+							end
+						end
+					end
+
 					if @weight > 0
 						@vertex = Vertex.create(:node_a => @node.id, :node_b => @tempEvent.id, :weight => @weight)
 					end

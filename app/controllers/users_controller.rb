@@ -173,7 +173,7 @@ class UsersController < ApplicationController
 											end
 										end
 									end
-									if @repeat == false
+									if @repeat == false && @event.user_id != current_user.id
 										@recommendation[@recommendation.size] = @event
 										@shown[@shown.size] = @event.id
 										@i = @i +1

@@ -13,11 +13,15 @@
 				%ul.nav.navbar-nav.navbar-right
 					%li= link_to "Search", show_users_path
 					%li= link_to "New Event", new_event_path
-					- @invites = EventsUser.select("events_users.*").where("events_users.user_id = ? AND events_users.owner != ?", current_user.id, current_user.id).uniq
+					- @count = 0
+					- @invites = EventsUser.select("events_users.*").where("events_users.user_id = ?", current_user.id).uniq
+					- @invites.each do |i|
+						-if i.owner != current_user.id
+							-@count = @count + 1
 					- if @invites.nil?
 						%li= link_to "Invites", invites_users_path
 					- else
-						%li= link_to "Invites (#{@invites.size})" , invites_users_path
+						%li= link_to "Invites (#{@count})" , invites_users_path
 					%li= link_to "Account", edit_user_registration_path
 					%li= link_to "Sign Out", destroy_user_session_path, method: :delete
 			- else
