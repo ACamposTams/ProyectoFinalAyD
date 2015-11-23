@@ -145,11 +145,7 @@ class UsersController < ApplicationController
 
 	def stats
 		@events = Event.select("events.*, events_users.*").joins("JOIN events_users ON events_users.event_id = events.id").where("events_users.owner = ?", current_user.id).uniq
-		@userEvents = Array.new()
 		# @userEvents = Event.select("events_users.*").joins("JOIN users ON users.id = events.user_id JOIN events_users ON events_users.user_id = users.id").where("events_users.event_id = ?", e.id).uniq
-		@sumI = Array.new()
-		@sumG = Array.new()
-		@i = 0
 
 		# @events.each do |e|
 		# 	@sumInvites = EventsUser.where("event_id = ? AND owner != ?", e.id, current_user.id).count 
