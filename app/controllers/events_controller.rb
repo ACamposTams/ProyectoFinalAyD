@@ -70,39 +70,41 @@ class EventsController < ApplicationController
 			@weight = 0
 
 			@nodes.each do |n| 
-				@tempEvent = Event.find(n.node_id)
+				if !n.nil?
+					@tempEvent = Event.find(n.node_id)
 
-				if @tempEvent.id != @event.id
-					@tagsB = @tempEvent.tags # esta es la funcion que deberiamos usar
-					#@tagsB = @tempEvent.all(select("events.tags").joins("JOIN events on event.id = nodes.node_id").where("events.id = ?", @tempEvent.id))
-					@weight = 0
-					@tagsA.each do |tagA|
-						@tagsB.each do |tagB|
-							if tagA == tagB
-								@weight = @weight + 1
-							end
-						end
-					end
-
-					@eventAWords = @event.description.split(" ")
-					@eventBWords = @tempEvent.description.split(" ")
-
-					if @weight > 0
-						@eventAWords.each do |wordsA|
-							@eventBWords.each do |wordsB|
-								if wordsA == wordsB
-									if wordsA != 'the' || wordsA != 'and' || wordsA != 'a' || wordsA != 'or' || wordsA != 'super' || wordsA != 'fantastic' || wordsA != 'awesome' || wordsA != 'my' || wordsA != 'mine' || wordsA != 'our' || wordsA != 'ours' || wordsA != 'we' || wordsA != 'I'       
-										@weight = @weight + 0.3
-									end   
+					if @tempEvent.id != @event.id
+						@tagsB = @tempEvent.tags # esta es la funcion que deberiamos usar
+						#@tagsB = @tempEvent.all(select("events.tags").joins("JOIN events on event.id = nodes.node_id").where("events.id = ?", @tempEvent.id))
+						@weight = 0
+						@tagsA.each do |tagA|
+							@tagsB.each do |tagB|
+								if tagA == tagB
+									@weight = @weight + 1
 								end
 							end
 						end
-					end
 
-					if @weight > 0
-						@vertex = Vertex.create(:node_a => @node.id, :node_b => @tempEvent.id, :weight => @weight)
-					end
+						@eventAWords = @event.description.split(" ")
+						@eventBWords = @tempEvent.description.split(" ")
 
+						if @weight > 0
+							@eventAWords.each do |wordsA|
+								@eventBWords.each do |wordsB|
+									if wordsA == wordsB
+										if wordsA != 'the' || wordsA != 'and' || wordsA != 'a' || wordsA != 'or' || wordsA != 'super' || wordsA != 'fantastic' || wordsA != 'awesome' || wordsA != 'my' || wordsA != 'mine' || wordsA != 'our' || wordsA != 'ours' || wordsA != 'we' || wordsA != 'I'       
+											@weight = @weight + 0.3
+										end   
+									end
+								end
+							end
+						end
+
+						if @weight > 0
+							@vertex = Vertex.create(:node_a => @node.id, :node_b => @tempEvent.id, :weight => @weight)
+						end
+
+					end
 				end
 			end
 
@@ -178,7 +180,9 @@ class EventsController < ApplicationController
 	end
 
 	def destroy
-		@node = Node.find(params[:id])
+		@id = params[:id]
+		@node = Node.find(@id)
+		
 		@event.destroy
 		@vertexes = Vertex.all
 
@@ -187,14 +191,15 @@ class EventsController < ApplicationController
 				v.destroy
 			end
 		end
+		@events_users = EventsUser.all
 
 		@events_users.each do |t|
 			if t.event_id == @node.id
 				t.destroy
 			end
 		end
-
 		@node.destroy
+		
 		redirect_to root_path
 	end
 
