@@ -6,5 +6,5 @@ Tiempo de ejecución de recomendaciones de usuarios (10 eventos): 0.016159s
 
 Tiempo de ejecución de recomendaciones de búsqueda de eventos (10 eventos): 0.00488s
 
-
+Complejidad de algoritmo de recomendación: O(10*N^2)
 
