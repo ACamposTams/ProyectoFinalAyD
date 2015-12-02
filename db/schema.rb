@@ -11,7 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123035909) do
+ActiveRecord::Schema.define(version: 20151202044958) do
+
+  create_table "art_cultures", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "user_id"
+    t.datetime "datetime"
+    t.string   "location"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "tags",               default: "{}"
+    t.string   "category"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
 
   create_table "events", force: :cascade do |t|
     t.string   "name"
@@ -26,6 +42,7 @@ ActiveRecord::Schema.define(version: 20151123035909) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.string   "tags",               default: "{}"
+    t.string   "category"
   end
 
   add_index "events", ["user_id"], name: "index_events_on_user_id"
@@ -39,11 +56,81 @@ ActiveRecord::Schema.define(version: 20151123035909) do
 
   add_index "events_users", ["event_id", "user_id"], name: "index_events_users_on_event_id_and_user_id"
 
+  create_table "holidays", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "user_id"
+    t.datetime "datetime"
+    t.string   "location"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "tags",               default: "{}"
+    t.string   "category"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
   create_table "nodes", force: :cascade do |t|
     t.integer  "node_id"
     t.integer  "num_vertices"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "others", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "user_id"
+    t.datetime "datetime"
+    t.string   "location"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "tags",               default: "{}"
+    t.string   "category"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  create_table "socials", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "user_id"
+    t.datetime "datetime"
+    t.string   "location"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "tags",               default: "{}"
+    t.string   "category"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  create_table "sports", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "user_id"
+    t.datetime "datetime"
+    t.string   "location"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "tags",               default: "{}"
+    t.string   "category"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  create_table "strategies", force: :cascade do |t|
+    t.string   "strategy"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "taggings", force: :cascade do |t|

@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-	before_action :find_event, only: [:show, :edit, :update, :destroy, :invite]
+	before_action :find_event, only: [:show, :edit, :update, :destroy, :invite, :setStrategy]
 	before_action :authenticate_user!, except: [:index, :show]
 	# after_action :create_events_user
 
@@ -113,6 +113,25 @@ class EventsController < ApplicationController
 			render 'new'
 		end
 		
+		@category = @event.category
+		Rails.logger.debug("CATEG: #{@category.inspect}")
+		if !@category.nil?
+			if @category == "Sports"
+				@newEvent = Sport.create(:name => @event.name, :description => @event.description, :user_id => @event.user_id, :datetime => @event.datetime, :location => @event.location)
+			elsif @category == "Art and Culture"
+				@newEvent = ArtCulture.create(:name => @event.name, :description => @event.description, :user_id => @event.user_id, :datetime => @event.datetime, :location => @event.location)
+			elsif @category == "Holiday"
+				@newEvent = Holiday.create(:name => @event.name, :description => @event.description, :user_id => @event.user_id, :datetime => @event.datetime, :location => @event.location)
+			elsif @category == "Social"
+				@newEvent = Social.create(:name => @event.name, :description => @event.description, :user_id => @event.user_id, :datetime => @event.datetime, :location => @event.location)
+			elsif @category == "Other"
+				@newEvent = Other.create(:name => @event.name, :description => @event.description, :user_id => @event.user_id, :datetime => @event.datetime, :location => @event.location)
+			end
+
+			if !@newEvent.nil?
+				@newEvent.execute
+			end
+		end
 	end
 
 	def invite
@@ -138,6 +157,9 @@ class EventsController < ApplicationController
 		# else
 		# 	redirect_to @event, notice: "Error"
 		# end
+	end
+
+	def execute
 	end
 
 	def edit
@@ -179,6 +201,20 @@ class EventsController < ApplicationController
 		end
 	end
 
+	# def setStrategy
+	# 	@strat = params[:option]
+
+	# 	if !@strat.nil?
+	# 		if @strat == 'Sports'
+	# 			@newEvent = SportsEvent.create()
+	# 		elsif @strat == 'Art and Culture'
+				
+	# 		end
+	# 	end
+
+	# 	@newEvent.execute
+	# end
+
 	def destroy
 		@id = params[:id]
 		@node = Node.find(@id)
@@ -206,7 +242,7 @@ class EventsController < ApplicationController
 	private
 
 	def ev_params
-		params.require(:event).permit(:name, :description, :location, :datetime, :all_tags, :image)
+		params.require(:event).permit(:name, :description, :location, :datetime, :all_tags, :image, :category)
 	end
 
 	def find_event
