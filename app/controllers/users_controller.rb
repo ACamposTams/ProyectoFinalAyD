@@ -163,6 +163,86 @@ class UsersController < ApplicationController
 		# end
 	end
 
+	def advancedsearch
+		# @search_name = params[:advancedsearch]
+		@search = Array.new()
+
+		# if @search_name == ""
+		# 	@search = Event.all
+		# else
+		# 	@search_name = @search_name.split(" ")
+		# 	@search_name.each do |s|
+		# 		@search = Event.select("events.*").joins("JOIN taggings ON taggings.event_id = events.id JOIN tags ON tags.id = taggings.tag_id").where(["events.name LIKE ? OR tags.name LIKE ?", "%#{s}%",  "%#{s}%"]).uniq
+		# 	end
+		# end
+
+		@location = params[:locationsearch]
+		@category = params[:categorysearch]
+
+		if !@location.nil? && !@category.nil?
+			@search = Event.select("events.*").where("events.location = ? OR events.category = ?", @location, @category)
+		elsif !@location.nil?
+			@search = Event.select("events.*").where("events.location = ?", @location)
+		elsif !@category.nil?
+			@search = Event.select("events.*").where("events.category = ?", @category)
+		end
+
+		Rails.logger.debug("SEEEARCH: #{@search.inspect}")
+
+
+		@safe_net = Event.all
+		if @search != @safe_net.size
+			@recommendation = Array.new()
+			@shown = Array.new()
+			@search.each do |e|
+				@shown[@shown.size] = e.id
+			end
+			@repeat = false
+			@i = 0
+
+			@search.each do |e|
+				if @shown.size == @safe_net.size
+					break
+				else
+					@eventVertices = Vertex.select("vertices.*").where(["node_a = ? OR node_b = ?", e.id, e.id]).order(weight: :desc)
+					@eventVertices.each do |ev|
+						if !ev.nil?
+							if @i == 10
+								break
+							else
+								@node = ev.node_a
+								if @node == e.id
+									@event = Event.find(ev.node_b)
+								else
+									@event = Event.find(@node)
+								end
+
+								if !@event.nil?
+									@shown.each do |r|
+										if !r.nil?
+											if r == @event.id
+												@repeat = true
+												break
+											else
+												@repeat = false
+											end
+										end
+									end
+									if @repeat == false && @event.user_id != current_user.id
+										@recommendation[@recommendation.size] = @event
+										@shown[@shown.size] = @event.id
+										@i = @i +1
+									end
+								end
+							end
+						end
+					end	
+				end
+			end
+		end
+
+	end
+
 	def stats
 		@events = Event.select("events_users.*").joins("JOIN events_users ON events_users.event_id = events.id").where("events_users.owner = ?", current_user.id).uniq
 		Rails.logger.debug("USEREVENTSS: #{@sumInvites.inspect}")

@@ -1,0 +1,44 @@
+= form_tag("/advancedsearch", method: "get") do
+	= label_tag(:location, 'Location:')
+	= text_field_tag(:locationsearch)
+	= label_tag(:category, 'Category:')
+	= text_field_tag(:categorysearch)
+	= submit_tag("Search")
+
+%h2= "Search Results"
+#events.transitions-enabled
+	-if @search.size != 0
+		-@search.each do |s|
+			.box.panel.panel-default
+				= link_to (image_tag s.image.url), s
+				.panel-body
+					%h2= link_to s.name, s
+					%p= s.datetime.to_date
+					%p= s.datetime.strftime("%I:%M%p")
+					Created by:
+					= s.user.first_name 
+					= s.user.last_name
+					%br
+					Tags:
+					= s.all_tags
+	-else
+		%h4= "No Results Found"
+%br
+%h2= "Suggestions Based On Your Search"
+#recommendations.transitions-enabled
+	-if @recommendation.size != 0
+		-@recommendation.each do |s|
+			.box.panel.panel-default
+				= link_to (image_tag s.image.url), s
+				.panel-body
+					%h2= link_to s.name, s
+					%p= s.datetime.to_date
+					%p= s.datetime.strftime("%I:%M%p")
+					Created by:
+					= s.user.first_name 
+					= s.user.last_name
+					%br
+					Tags:
+					= s.all_tags
+	-else
+		%h4= "No Suggestions Found"

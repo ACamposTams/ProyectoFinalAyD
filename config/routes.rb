@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get '/users/stats.pdf' => 'users#stats', :as => :statspdf_users
   get '/users/show' => 'users#show', :as => :show_users
   get '/search' => 'users#search', :as => :search
+  get '/advancedsearch' => 'users#advancedsearch', :as => :advancedsearch
 
   get 'events_users/invite/:id' => 'events_users#invite', :as => :invite_events_users
   get 'tags/:tag', to: 'events#index', as: "tag"
