@@ -132,6 +132,10 @@ class EventsController < ApplicationController
 				@newEvent.execute
 			end
 		end
+
+		@adminLog = Log.instance
+		@adminLog.info("User (#{current_user.id}) #{current_user.first_name} created event (#{@event.id}) #{@event.name}")
+		@adminLog.write("log.txt")
 	end
 
 	def invite
@@ -219,6 +223,10 @@ class EventsController < ApplicationController
 		@id = params[:id]
 		@node = Node.find(@id)
 		
+		@adminLog = Log.instance
+		@adminLog.info("User (#{current_user.id}) #{current_user.first_name} deleted event (#{@event.id}) #{@event.name}")
+		@adminLog.write("log.txt")
+
 		@event.destroy
 		@vertexes = Vertex.all
 

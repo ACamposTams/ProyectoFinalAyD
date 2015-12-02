@@ -1,0 +1,17 @@
+2015-12-02 00:23:48 -0600 | INFO: User (1) Catalina created event (40) @event.name at 2015-12-02 00:23:48 -0600
+2015-12-02 00:25:24 -0600 | INFO: User (1) Catalina created event (41) other
+2015-12-02 00:28:24 -0600 | INFO: User (1) Catalina deleted event (37) new Event
+2015-12-02 00:28:24 -0600 | INFO: User (1) Catalina deleted event (37) new Event
+2015-12-02 00:28:29 -0600 | INFO: User (1) Catalina deleted event (38) new Event
+2015-12-02 00:28:24 -0600 | INFO: User (1) Catalina deleted event (37) new Event
+2015-12-02 00:28:29 -0600 | INFO: User (1) Catalina deleted event (38) new Event
+2015-12-02 00:28:43 -0600 | INFO: User (1) Catalina deleted event (39) new Event
+2015-12-02 00:28:24 -0600 | INFO: User (1) Catalina deleted event (37) new Event
+2015-12-02 00:28:29 -0600 | INFO: User (1) Catalina deleted event (38) new Event
+2015-12-02 00:28:43 -0600 | INFO: User (1) Catalina deleted event (39) new Event
+2015-12-02 00:28:48 -0600 | INFO: User (1) Catalina deleted event (40) new Event
+2015-12-02 00:28:24 -0600 | INFO: User (1) Catalina deleted event (37) new Event
+2015-12-02 00:28:29 -0600 | INFO: User (1) Catalina deleted event (38) new Event
+2015-12-02 00:28:43 -0600 | INFO: User (1) Catalina deleted event (39) new Event
+2015-12-02 00:28:48 -0600 | INFO: User (1) Catalina deleted event (40) new Event
+2015-12-02 00:28:52 -0600 | INFO: User (1) Catalina deleted event (41) other
