@@ -140,7 +140,7 @@ class EventsController < ApplicationController
 		@adminLog.info("User (#{current_user.id}) #{current_user.first_name} created event (#{@event.id}) #{@event.name}")
 		@adminLog.write("log.txt")
 
-		add_observer(Notifier.new, func=:informInvitees)
+		add_observer(Notifier.new)
 	end
 
 	def invite
@@ -155,7 +155,7 @@ class EventsController < ApplicationController
 			params[:user].each do |u| 
 				if !u.empty?
 					@event.eventsusers.build(:user_id => u)
-					event.add_observer(Notifier.new, func=:informInvitees)
+					# event.add_observer(Notifier.new, func=:informInvitees)
 				end 
 			end
 		redirect_to @event
@@ -177,6 +177,7 @@ class EventsController < ApplicationController
 
 	def update
 		if @event.update(ev_params)
+			changed
 			notify_observers(self, ev_params)
 			Rails.logger.debug("NOTIFIED?")
 			@vertexes = Vertex.all
