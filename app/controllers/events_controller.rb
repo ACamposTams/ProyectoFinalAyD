@@ -155,7 +155,7 @@ class EventsController < ApplicationController
 			params[:user].each do |u| 
 				if !u.empty?
 					@event.eventsusers.build(:user_id => u)
-					# event.add_observer(Notifier.new, func=:informInvitees)
+					@event.add_observer(Notifier.new)
 				end 
 			end
 		redirect_to @event
@@ -178,7 +178,7 @@ class EventsController < ApplicationController
 	def update
 		if @event.update(ev_params)
 			changed
-			notify_observers(self, ev_params)
+			notify_observers(@event, ev_params)
 			Rails.logger.debug("NOTIFIED?")
 			@vertexes = Vertex.all
 			@node = Node.find(@event.id)

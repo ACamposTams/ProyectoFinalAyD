@@ -1,6 +1,6 @@
 class Notifier < ActiveRecord::Base
 	def update(event, info)
-    	puts "#{event.name} has changed its time to #{info}."
+    	event.create(info)
     	Rails.logger.debug("DEGUBBING NOTIFIER")
 	end
 

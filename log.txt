@@ -23,3 +23,42 @@
 2015-12-03 22:18:39 -0600 | INFO: User (1) Catalina created event (46) regre
 2015-12-03 22:24:18 -0600 | INFO: User (1) Catalina created event (47) retgr
 2015-12-03 22:47:54 -0600 | INFO: User (1) Catalina created event (48) testing
+2015-12-04 09:04:55 -0600 | INFO: User (1) Catalina created event (49) test2
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:52 -0600 | INFO: User (1) Catalina deleted event (42) MY NEW NOTIFIER EVENT
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:52 -0600 | INFO: User (1) Catalina deleted event (42) MY NEW NOTIFIER EVENT
+2015-12-04 09:09:57 -0600 | INFO: User (1) Catalina deleted event (46) regre
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:52 -0600 | INFO: User (1) Catalina deleted event (42) MY NEW NOTIFIER EVENT
+2015-12-04 09:09:57 -0600 | INFO: User (1) Catalina deleted event (46) regre
+2015-12-04 09:10:03 -0600 | INFO: User (1) Catalina deleted event (49) test2
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:52 -0600 | INFO: User (1) Catalina deleted event (42) MY NEW NOTIFIER EVENT
+2015-12-04 09:09:57 -0600 | INFO: User (1) Catalina deleted event (46) regre
+2015-12-04 09:10:03 -0600 | INFO: User (1) Catalina deleted event (49) test2
+2015-12-04 09:10:08 -0600 | INFO: User (1) Catalina deleted event (47) retgr
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:52 -0600 | INFO: User (1) Catalina deleted event (42) MY NEW NOTIFIER EVENT
+2015-12-04 09:09:57 -0600 | INFO: User (1) Catalina deleted event (46) regre
+2015-12-04 09:10:03 -0600 | INFO: User (1) Catalina deleted event (49) test2
+2015-12-04 09:10:08 -0600 | INFO: User (1) Catalina deleted event (47) retgr
+2015-12-04 09:10:13 -0600 | INFO: User (1) Catalina deleted event (48) testing
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:52 -0600 | INFO: User (1) Catalina deleted event (42) MY NEW NOTIFIER EVENT
+2015-12-04 09:09:57 -0600 | INFO: User (1) Catalina deleted event (46) regre
+2015-12-04 09:10:03 -0600 | INFO: User (1) Catalina deleted event (49) test2
+2015-12-04 09:10:08 -0600 | INFO: User (1) Catalina deleted event (47) retgr
+2015-12-04 09:10:13 -0600 | INFO: User (1) Catalina deleted event (48) testing
+2015-12-04 09:10:19 -0600 | INFO: User (1) Catalina deleted event (43) rgg
+2015-12-04 09:09:47 -0600 | INFO: User (1) Catalina deleted event (45) regre
+2015-12-04 09:09:52 -0600 | INFO: User (1) Catalina deleted event (42) MY NEW NOTIFIER EVENT
+2015-12-04 09:09:57 -0600 | INFO: User (1) Catalina deleted event (46) regre
+2015-12-04 09:10:03 -0600 | INFO: User (1) Catalina deleted event (49) test2
+2015-12-04 09:10:08 -0600 | INFO: User (1) Catalina deleted event (47) retgr
+2015-12-04 09:10:13 -0600 | INFO: User (1) Catalina deleted event (48) testing
+2015-12-04 09:10:19 -0600 | INFO: User (1) Catalina deleted event (43) rgg
+2015-12-04 09:10:39 -0600 | INFO: User (1) Catalina deleted event (44) notifier test
+2015-12-04 09:13:14 -0600 | INFO: User (1) Catalina created event (50) new event
+2015-12-04 10:03:55 -0600 | INFO: User (1) Catalina deleted event (50) My Raspberry Pi Event
