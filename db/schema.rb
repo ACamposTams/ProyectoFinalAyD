@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202054604) do
+ActiveRecord::Schema.define(version: 20151204034758) do
 
   create_table "art_cultures", force: :cascade do |t|
     t.string   "name"
@@ -83,6 +83,11 @@ ActiveRecord::Schema.define(version: 20151202054604) do
     t.integer  "num_vertices"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "notifiers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "others", force: :cascade do |t|

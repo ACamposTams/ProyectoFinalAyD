@@ -1,4 +1,7 @@
+require 'observer'
+
 class EventsController < ApplicationController
+	include Observable
 	before_action :find_event, only: [:show, :edit, :update, :destroy, :invite, :setStrategy]
 	before_action :authenticate_user!, except: [:index, :show]
 	# after_action :create_events_user
@@ -136,6 +139,8 @@ class EventsController < ApplicationController
 		@adminLog = Log.instance
 		@adminLog.info("User (#{current_user.id}) #{current_user.first_name} created event (#{@event.id}) #{@event.name}")
 		@adminLog.write("log.txt")
+
+		add_observer(Notifier.new, func=:informInvitees)
 	end
 
 	def invite
@@ -150,6 +155,7 @@ class EventsController < ApplicationController
 			params[:user].each do |u| 
 				if !u.empty?
 					@event.eventsusers.build(:user_id => u)
+					event.add_observer(Notifier.new, func=:informInvitees)
 				end 
 			end
 		redirect_to @event
@@ -171,6 +177,8 @@ class EventsController < ApplicationController
 
 	def update
 		if @event.update(ev_params)
+			notify_observers(self, ev_params)
+			Rails.logger.debug("NOTIFIED?")
 			@vertexes = Vertex.all
 			@node = Node.find(@event.id)
 			@vertexes.each do |v|
@@ -178,6 +186,7 @@ class EventsController < ApplicationController
 					v.destroy
 				end
 			end
+
 			redirect_to @event, notice: "Event was succesfully updated"
 			@tagsA = @event.tags
 			@nodes = Node.all

@@ -18,3 +18,7 @@
 2015-12-02 02:23:53 -0600 | INFO: User (1) Catalina created event (42) grtgtr
 2015-12-02 02:23:53 -0600 | INFO: User (1) Catalina created event (42) grtgtr
 2015-12-02 02:25:31 -0600 | INFO: User (1) Catalina created event (43) rgg
+2015-12-03 21:58:21 -0600 | INFO: User (1) Catalina created event (44) notifier test
+2015-12-03 22:17:19 -0600 | INFO: User (1) Catalina created event (45) regre
+2015-12-03 22:18:39 -0600 | INFO: User (1) Catalina created event (46) regre
+2015-12-03 22:24:18 -0600 | INFO: User (1) Catalina created event (47) retgr
